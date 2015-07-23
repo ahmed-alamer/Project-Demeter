@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+    <div class="panel-body">
+      <span class="pull-right">
+        <%= link_to 'New Bounty', new_bounty_path, :class => "btn btn-primary" %>
+      </span>
+    </div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Guid</th>
+          <th>Entry date</th>
+          <th>Amount</th>
+          <th>Receiver wallet</th>
+          <th>Grant</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @bounties.each do |bounty| %>
+          <tr>
+            <td><%= bounty.GUID %></td>
+            <td><%= bounty.entry_date %></td>
+            <td><%= bounty.amount %></td>
+            <td><%= bounty.receiver_wallet %></td>
+            <td><%= bounty.grant_id %></td>
+            <td><%= link_to 'Show', bounty %></td>
+            <td><%= link_to 'Edit', edit_bounty_path(bounty) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>

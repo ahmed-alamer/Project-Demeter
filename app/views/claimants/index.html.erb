@@ -1,0 +1,39 @@
+<% if notice %>
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Claimants</div>
+    <div class="panel-body">
+      <span class="pull-right"><%= link_to 'New Claimant', new_claimant_path, :class => "btn btn-primary" %></span>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Emai</th>
+          <th>Address</th>
+          <th>Country</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @claimants.each do |claimant| %>
+          <tr>
+            <td><%= claimant.name %></td>
+            <td><%= claimant.email %></td>
+            <td><%= claimant.address %></td>
+            <td><%= claimant.country %></td>
+            <td><%= link_to 'Show', claimant %></td>
+            <td><%= link_to 'Edit', edit_claimant_path(claimant) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>
+

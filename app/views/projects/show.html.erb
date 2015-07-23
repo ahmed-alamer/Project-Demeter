@@ -1,0 +1,51 @@
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Project Details</h3>
+    </div>
+    <div class="panel-body">
+      
+      <p>
+        <strong>Guid:</strong>
+        <%= @project.GUID %>
+      </p>
+
+      <p>
+        <strong>Name:</strong>
+        <%= @project.name %>
+      </p>
+
+      <p>
+        <strong>Nameplate:</strong>
+        <%= @project.nameplate %>
+      </p>
+
+      <p>
+        <strong>Address:</strong>
+        <%= @project.address %>
+      </p>
+
+      <p>
+        <strong>Post code:</strong>
+        <%= @project.post_code %>
+      </p>
+
+      <p>
+        <strong>Country:</strong>
+        <%= @project.country %>
+      </p>
+
+      <p>
+        <strong>Install date:</strong>
+        <%= @project.install_date %>
+      </p>
+
+      <%= link_to 'Edit', edit_project_path(@project) %> |
+      <%= link_to 'Back', projects_path %>
+
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= @view_title %></h3>
+    </div>
+    <div class="panel-body">
+      <%= form_for@bounty, layout: :basic do |f| %>
+        <div class="field">
+          <%= f.text_field :GUID %>
+        </div>
+        <div class="field">
+          <%= f.text_field :entry_date %>
+        </div>
+        <div class="field">
+          <%= f.text_field :amount %>
+        </div>
+        <div class="field">
+          <%= f.text_field :receiver_wallet %>
+        </div>
+        <div class="field">
+          <%= f.text_field :grant_id %>
+        </div>
+        <div class="actions">
+          <%= f.submit %>
+          <%= link_to "Back", bounties_path, :class => "btn btn-default" %>
+        </div>
+      <% end %>
+    </div>
+</div>

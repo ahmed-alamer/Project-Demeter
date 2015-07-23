@@ -1,0 +1,42 @@
+<% if notice %>
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+<div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Grant Details</h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <strong>Entry date:</strong>
+        <%= @grant.entry_date %>
+      </p>
+
+      <p>
+        <strong>Approval code:</strong>
+        <%= @grant.approval_code %>
+      </p>
+
+      <p>
+        <strong>Amount:</strong>
+        <%= @grant.amount %>
+      </p>
+
+      <p>
+        <strong>Project:</strong>
+        <%= @grant.project_id %>
+      </p>
+
+      <p>
+        <strong>Receiver wallet:</strong>
+        <%= @grant.receiver_wallet %>
+      </p>
+
+      <%= link_to 'Edit', edit_grant_path(@grant) %> |
+      <%= link_to 'Back', grants_path %>
+
+    </div>
+</div>
