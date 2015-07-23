@@ -1,0 +1,43 @@
+<% if notice %>
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Bounty Details</h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <strong>Guid:</strong>
+        <%= @bounty.GUID %>
+      </p>
+
+      <p>
+        <strong>Entry date:</strong>
+        <%= @bounty.entry_date %>
+      </p>
+
+      <p>
+        <strong>Amount:</strong>
+        <%= @bounty.amount %>
+      </p>
+
+      <p>
+        <strong>Receiver wallet:</strong>
+        <%= @bounty.receiver_wallet %>
+      </p>
+
+      <p>
+        <strong>Grant:</strong>
+        <%= @bounty.grant_id %>
+      </p>
+
+      <%= link_to 'Edit', edit_bounty_path(@bounty) %> |
+      <%= link_to 'Back', bounties_path %>
+
+    </div>
+</div>

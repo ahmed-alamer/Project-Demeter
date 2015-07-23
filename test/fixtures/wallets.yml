@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  public_address: MyString
+  tag: MyString
+  owner: 1
+
+two:
+  public_address: MyString
+  tag: MyString
+  owner: 1

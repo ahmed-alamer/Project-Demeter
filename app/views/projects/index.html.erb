@@ -1,0 +1,47 @@
+<% if notice %>
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Projects</div>
+    <div class="panel-body">
+      <span class="pull-right">
+        <%= link_to 'New Project', new_project_path, :class => "btn btn-primary" %>
+      </span>
+    </div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>GUID</th>
+          <th>Name</th>
+          <th>Nameplate</th>
+          <th>Address</th>
+          <th>Post code</th>
+          <th>Country</th>
+          <th>Install date</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= project.GUID %></td>
+            <td><%= project.name %></td>
+            <td><%= project.nameplate %></td>
+            <td><%= project.address %></td>
+            <td><%= project.post_code %></td>
+            <td><%= project.country %></td>
+            <td><%= project.install_date %></td>
+            <td><%= link_to 'Show', project %></td>
+            <td><%= link_to 'Edit', edit_project_path(project) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>

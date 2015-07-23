@@ -1,0 +1,39 @@
+<% if notice %>
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+<div class="panel panel-info">
+	  <div class="panel-heading">
+			<h3 class="panel-title">Claimant Details</h3>
+	  </div>
+	  <div class="panel-body">
+			<p id="notice"><%= notice %></p>
+
+			<p>
+			  <strong>Name:</strong>
+			  <%= @claimant.name %>
+			</p>
+
+			<p>
+			  <strong>Email:</strong>
+			  <%= @claimant.email %>
+			</p>
+
+			<p>
+			  <strong>Address:</strong>
+			  <%= @claimant.address %>
+			</p>
+
+			<p>
+			  <strong>Country:</strong>
+			  <%= @claimant.country %>
+			</p>
+
+			<%= link_to 'Edit', edit_claimant_path(@claimant) %> |
+			<%= link_to 'Back', claimants_path %>
+
+	  </div>
+</div>
