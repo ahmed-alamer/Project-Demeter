@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:edit, :update, :destroy]
+  before_action :get_claimant, only: [:create, :update]
 
   # GET /projects
   # GET /projects.json
@@ -10,6 +11,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
+    @project = Project.find(params[:id])
   end
 
   # GET /projects/new
@@ -25,7 +27,6 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-
     respond_to do |format|
       if @project.save
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
@@ -40,7 +41,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    respond_to do |format|
+     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { render :show, status: :ok, location: @project }
@@ -65,10 +66,16 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
+      @project.claimant_id = @project.claimant.name
+    end
+
+    def get_claimant
+      claimant = Claimant.where(:name => project_params[:claimant_id]).take
+      params[:project][:claimant_id] = claimant.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:GUID, :name, :nameplate, :address, :post_code, :country, :install_date)
+      params.require(:project).permit(:GUID, :name, :nameplate, :address, :post_code, :country, :install_date, :claimant_id)
     end
 end
