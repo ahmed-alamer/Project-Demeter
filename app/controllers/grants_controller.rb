@@ -1,5 +1,6 @@
 class GrantsController < ApplicationController
-  before_action :set_grant, only: [:show, :edit, :update, :destroy]
+  before_action :set_grant, only: [:edit, :update, :destroy]
+  before_action :get_project, only: [:create, :update]
 
   # GET /grants
   # GET /grants.json
@@ -10,6 +11,7 @@ class GrantsController < ApplicationController
   # GET /grants/1
   # GET /grants/1.json
   def show
+    @grant = Grant.find(params[:id])
   end
 
   # GET /grants/new
@@ -25,7 +27,6 @@ class GrantsController < ApplicationController
   # POST /grants.json
   def create
     @grant = Grant.new(grant_params)
-
     respond_to do |format|
       if @grant.save
         format.html { redirect_to @grant, notice: 'Grant was successfully created.' }
@@ -65,6 +66,12 @@ class GrantsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_grant
       @grant = Grant.find(params[:id])
+      @grant.project_id = @grant.project.name
+    end
+
+    def get_project
+      project = Project.where(:name => grant_params[:project_id]).take
+      params[:grant][:project_id] = project.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

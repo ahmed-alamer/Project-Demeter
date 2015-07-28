@@ -3,7 +3,7 @@
       <h3 class="panel-title"><%= @view_title %></h3>
     </div>
     <div class="panel-body">
-      <%= form_for@bounty, layout: :basic do |f| %>
+      <%= form_for @bounty, layout: :basic do |f| %>
         <div class="field">
           <%= f.text_field :GUID %>
         </div>
