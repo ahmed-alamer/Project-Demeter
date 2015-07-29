@@ -1,5 +1,6 @@
 class WalletsController < ApplicationController
-  before_action :set_wallet, only: [:show, :edit, :update, :destroy]
+  before_action :set_wallet, only: [:edit, :update, :destroy]
+  before_action :get_claimant, only: [:create, :update]
 
   # GET /wallets
   # GET /wallets.json
@@ -10,6 +11,7 @@ class WalletsController < ApplicationController
   # GET /wallets/1
   # GET /wallets/1.json
   def show
+    @wallet = Wallet.find(params[:id])
   end
 
   # GET /wallets/new
@@ -25,7 +27,6 @@ class WalletsController < ApplicationController
   # POST /wallets.json
   def create
     @wallet = Wallet.new(wallet_params)
-
     respond_to do |format|
       if @wallet.save
         format.html { redirect_to @wallet, notice: 'Wallet was successfully created.' }
@@ -65,10 +66,16 @@ class WalletsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_wallet
       @wallet = Wallet.find(params[:id])
+      @wallet.claimant_id = @wallet.claimant.name
+    end
+
+    def get_claimant
+      claimant = Claimant.where(:name => wallet_params[:claimant_id]).take
+      params[:wallet][:claimant_id] = claimant.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def wallet_params
-      params.require(:wallet).permit(:public_address, :tag, :owner)
+      params.require(:wallet).permit(:public_address, :tag, :claimant_id)
     end
 end
