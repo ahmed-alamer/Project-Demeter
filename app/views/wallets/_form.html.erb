@@ -10,8 +10,8 @@
         <div class="field">
           <%= f.text_field :tag %>
         </div>
-        <div class="field">
-          <%= f.number_field :owner %>
+        <div id="bloodhound">
+          <%= f.text_field :claimant_id %>
         </div>
         <div class="actions">
           <%= f.submit %>
@@ -20,3 +20,23 @@
       <% end %>
     </div>
 </div>
+
+<script type="text/javascript">
+  var claimants = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: '/claimants.json'
+    }
+  });
+  $('#wallet_claimant_id').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'claimants',
+    displayKey: "name",
+    source: claimants
+  });
+</script>
