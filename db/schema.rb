@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150729033804) do
+ActiveRecord::Schema.define(version: 20150801221159) do
 
   create_table "bounties", force: :cascade do |t|
     t.string   "GUID",            limit: 255
@@ -38,8 +38,9 @@ ActiveRecord::Schema.define(version: 20150729033804) do
     t.decimal  "amount",                      precision: 10
     t.string   "project_id",      limit: 255
     t.string   "receiver_wallet", limit: 255
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "type_tag",        limit: 255,                default: "PGRT"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -53,6 +54,7 @@ ActiveRecord::Schema.define(version: 20150729033804) do
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
     t.integer  "claimant_id",  limit: 4
+    t.string   "status",       limit: 255
   end
 
   create_table "wallets", force: :cascade do |t|
