@@ -11,7 +11,6 @@
     <div class="panel-body">
       <span class="pull-right">
         <%= link_to 'New Project', new_project_path, :class => "btn btn-primary" %>
-        <%= link_to "Approve Projects", approve_projects_path, :class => "btn btn-success" %>
       </span>
     </div>
 
@@ -19,7 +18,6 @@
       <thead>
         <tr>
           <th>GUID</th>
-          <th>Status</th>
           <th>Name</th>
           <th>Nameplate</th>
           <th>Address</th>
@@ -34,7 +32,6 @@
         <% @projects.each do |project| %>
           <tr>
             <td><%= project.GUID %></td>
-            <td><%= project.approval_status == nil ? "Pending" : project.status %></td>
             <td><%= project.name %></td>
             <td><%= project.nameplate %></td>
             <td><%= project.address %></td>
