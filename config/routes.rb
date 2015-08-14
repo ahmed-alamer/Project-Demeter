@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  get 'approve_projects/index'
+
+  resources :approve_projects
+  
+  resources :approval_statuses
   resources :wallets
   resources :grants
   resources :bounties
