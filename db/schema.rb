@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150809035428) do
+ActiveRecord::Schema.define(version: 20150814114319) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -57,10 +57,10 @@ ActiveRecord::Schema.define(version: 20150809035428) do
     t.string   "post_code",    limit: 255
     t.string   "country",      limit: 255
     t.string   "install_date", limit: 255
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
     t.integer  "claimant_id",  limit: 4
-    t.string   "status",       limit: 255
+    t.string   "status",       limit: 255,                default: "P"
   end
 
   create_table "wallets", force: :cascade do |t|
