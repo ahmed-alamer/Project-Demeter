@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801221159) do
+ActiveRecord::Schema.define(version: 20150809035428) do
+
+  create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
+    t.string   "details",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "bounties", force: :cascade do |t|
     t.string   "GUID",            limit: 255
