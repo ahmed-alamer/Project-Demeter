@@ -1,0 +1,110 @@
+<div class="panel panel-default">
+	  <div class="panel-heading">
+			<h3 class="panel-title">Pending Projects</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<table class="table table-hover table-responsive">
+	  	  <thead>
+	  	    <tr>
+	  	    	<th>ID</th>
+	  	      <th>GUID</th>
+	  	      <th>Claimant</th>
+	  	      <th>Name</th>
+	  	      <th>Nameplate</th>
+	  	      <th>Address</th>
+	  	      <th>Post code</th>
+	  	      <th>Country</th>
+	  	      <th>Install date</th>
+	  	      <th>Status</th>
+	  	      <th></th>
+	  	    </tr>
+	  	  </thead>
+
+	  	  <tbody id="projects">
+	  	    <% @projects.each do |project| %>
+	  	      <tr>
+	  	      	<td name="id"><%= project.id %></td>
+	  	        <td><%= project.GUID %></td>
+	  	        <td><%= project.claimant.name %></td>
+	  	        <td><%= project.name %></td>
+	  	        <td><%= project.nameplate %></td>
+	  	        <td><%= project.address %></td>
+	  	        <td><%= project.post_code %></td>
+	  	        <td><%= project.country %></td>
+	  	        <td><%= project.install_date %></td>
+	  	        <td>
+	  	        	<select id="approvalCode<%=project.id%>">
+	  	        		<option value="<%= get_project_status(project.approval_status, :code) %>">
+	  	        			<%= get_project_status(project.approval_status, :details) %>
+	  	        		</option>
+	  	        	</select>
+	  	        </td>
+	  	      </tr>
+	  	    <% end %>
+	  	  </tbody>
+	  	</table>
+	  	<span class="pull-right">
+	  		<button type="button" onclick="submitProjects()" class="btn btn-sm btn-success">Submit</button>
+	  		<%= link_to "Back to Projects", projects_path, :class => "btn btn-sm btn-default" %>
+	  	</span>
+	  </div>
+</div>
+<script type="text/javascript">
+	
+	var approvalCodes = [];
+
+	function fillApprovalCodes(approvalSelectMenu) {
+		approvalCodes.forEach(function (code) {
+			if(approvalSelectMenu.find("option[value="+code.id+"]").val() == undefined) {
+				$(approvalSelectMenu).append("<option value='" + code.id + "'>" + code.details + "</option>");							
+			}
+		});
+	}
+
+	function submitProjects () {
+		var approvedProjects = [];
+
+		$("#projects").children().each(function(){
+			var projectId = $(this).find("td[name=id]").html();
+			var projectStatus = $(this).find("select").val();
+			if(projectStatus != "Pending") {
+				approvedProjects.push({"project_id" : projectId, "project_status" : projectStatus});
+			}
+		});
+
+		console.log(approvedProjects);
+
+		$.ajax({
+			url: "/approve_projects",
+			method: "post",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify({"approved_projects": approvedProjects}),
+			success: function(result) {
+				console.log(result);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	}
+
+	$.ajax({
+		url: "/approval_statuses.json",
+		method: "get",
+		success: function (data) {
+			data.forEach(function(item) {
+				approvalCodes.push(item);
+			});
+
+			$("#projects").children().each(function(index, project) {
+				fillApprovalCodes($(project).find("select"))
+			});
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+
+
+</script>
