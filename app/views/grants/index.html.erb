@@ -18,7 +18,6 @@
       <thead>
         <tr>
           <th>Entry date</th>
-          <th>Approval code</th>
           <th>Amount</th>
           <th>Project</th>
           <th>Receiver wallet</th>
@@ -30,7 +29,6 @@
         <% @grants.each do |grant| %>
           <tr>
             <td><%= grant.entry_date %></td>
-            <td><%= grant.approval_code %></td>
             <td><%= grant.amount %></td>
             <td><%= grant.project_id %></td>
             <td><%= grant.receiver_wallet %></td>
