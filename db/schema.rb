@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814114319) do
+ActiveRecord::Schema.define(version: 20150816005613) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -40,9 +40,8 @@ ActiveRecord::Schema.define(version: 20150814114319) do
 
   create_table "grants", force: :cascade do |t|
     t.string   "entry_date",      limit: 255
-    t.string   "approval_code",   limit: 255
     t.decimal  "amount",                      precision: 10
-    t.string   "project_id",      limit: 255
+    t.integer  "project_id",      limit: 4
     t.string   "receiver_wallet", limit: 255
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
@@ -61,6 +60,10 @@ ActiveRecord::Schema.define(version: 20150814114319) do
     t.datetime "updated_at",                                            null: false
     t.integer  "claimant_id",  limit: 4
     t.string   "status",       limit: 255,                default: "P"
+  end
+
+  create_table "test_table", force: :cascade do |t|
+    t.datetime "created_at"
   end
 
   create_table "wallets", force: :cascade do |t|
