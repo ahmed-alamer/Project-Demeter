@@ -34,7 +34,7 @@
         <% @projects.each do |project| %>
           <tr>
             <td><%= project.GUID %></td>
-            <td><%= project.approval_status == nil ? "Pending" : project.status %></td>
+            <td><%= project.status == "P" ? "Pending" : project.status %></td>
             <td><%= project.name %></td>
             <td><%= project.nameplate %></td>
             <td><%= project.address %></td>

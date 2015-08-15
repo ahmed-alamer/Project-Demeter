@@ -34,8 +34,8 @@
 	  	        <td><%= project.install_date %></td>
 	  	        <td>
 	  	        	<select id="approvalCode<%=project.id%>">
-	  	        		<option value="<%= get_project_status(project.approval_status, :code) %>">
-	  	        			<%= get_project_status(project.approval_status, :details) %>
+	  	        		<option value="<%= project.approval_status.code %>">
+	  	        			<%= project.approval_status.details %>
 	  	        		</option>
 	  	        	</select>
 	  	        </td>
@@ -82,6 +82,7 @@
 			data: JSON.stringify({"approved_projects": approvedProjects}),
 			success: function(result) {
 				console.log(result);
+				location.reload();
 			},
 			error: function(error) {
 				console.log(error);
