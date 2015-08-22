@@ -12,12 +12,18 @@
     </div>
     <div class="panel-body">
       <p>
-        <strong>Claimant:</strong>
-        <%= @project.claimant.name %>
+        <strong>Generator ID:</strong>
+        <%= @project.claimant_id %>
       </p>
+
       <p>
-        <strong>Guid:</strong>
-        <%= @project.GUID %>
+        <strong>Claimant Name:</strong>
+        <%= @project.claimant.first_name + " " + @project.claimant.last_name %>
+      </p>
+
+      <p>
+        <strong>Claimant Email:</strong>
+        <%= @project.claimant.email %>
       </p>
 
       <p>
@@ -27,7 +33,7 @@
 
       <p>
         <strong>Nameplate:</strong>
-        <%= @project.nameplate %>
+        <%= number_to_human(@project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %>
       </p>
 
       <p>
@@ -47,7 +53,7 @@
 
       <p>
         <strong>Install date:</strong>
-        <%= @project.install_date %>
+        <%= @project.install_date.strftime("%Y-%m-%d") %>
       </p>
 
       <%= link_to 'Edit', edit_project_path(@project) %> |

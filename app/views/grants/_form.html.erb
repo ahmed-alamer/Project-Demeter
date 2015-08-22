@@ -5,9 +5,6 @@
     <div class="panel-body">
       <%= form_for(@grant, layout: :basic) do |f| %>
         <div class="field">
-          <%= f.text_field :entry_date %>
-        </div>
-        <div class="field">
           <%= f.text_field :amount %>
         </div>
         <div id="bloodhound">
@@ -16,6 +13,13 @@
         <div class="field">
           <%= f.text_field :receiver_wallet %>
         </div>
+        <div class="field">
+          <select name="grant[type_tag]" id="grant_type_tag" class="form-control">
+            <option value="PGRT">PGRT</option>            
+            <option value="AGRT">AGRT</option>
+          </select>
+        </div>
+        <br/>
         <div class="actions">
           <%= f.submit %>
           <%= link_to "Back", grants_path, :class => "btn btn-default" %>
@@ -23,23 +27,7 @@
       <% end %>
     </div>
 </div>
+
 <script type="text/javascript">
-  
-  var projects = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: '/projects.json'
-    }
-  });
-  $('#grant_project_id').typeahead({
-    hint: true,
-    highlight: true,
-    minLength: 1
-  },
-  {
-    name: 'projects',
-    displayKey: "name",
-    source: projects
-  });
+  bindTypeahead("grant_project_id", "projects");
 </script>

@@ -6,6 +6,9 @@ class ProjectsController < ApplicationController
   # GET /projects.json
   def index
     @projects = Project.all
+    @approved_projects = Project.where(:status => "A1")
+    @pending_projects = Project.where(:status => "P")
+    @rejected_projects = Project.where("status LIKE 'R%'")
   end
 
   # GET /projects/1
@@ -66,16 +69,17 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
-      @project.claimant_id = @project.claimant.name
+      @project.claimant_id = @project.claimant.first_name + " " + @project.claimant.last_name
     end
 
     def get_claimant
-      claimant = Claimant.where(:name => project_params[:claimant_id]).take
+      full_name = project_params[:claimant_id].split(" ")
+      claimant = Claimant.where(:first_name => full_name[0], :last_name => full_name[1]).take
       params[:project][:claimant_id] = claimant.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:GUID, :name, :nameplate, :address, :post_code, :country, :install_date, :claimant_id)
+      params.require(:project).permit(:name, :nameplate, :address, :post_code, :country, :install_date, :claimant_id)
     end
 end
