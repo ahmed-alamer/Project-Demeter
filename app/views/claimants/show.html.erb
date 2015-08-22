@@ -34,6 +34,28 @@
 
 			<%= link_to 'Edit', edit_claimant_path(@claimant) %> |
 			<%= link_to 'Back', claimants_path %>
+			
+			<hr/>
+			<h5>Wallets</h5>
+			<table class="table table-hover">
+			  <thead>
+			    <tr>
+			      <th>Public address</th>
+			      <th>Tag</th>
+			      <th colspan="2"></th>
+			    </tr>
+			  </thead>
+
+			  <tbody>
+			    <% @claimant.wallets.each do |wallet| %>
+			      <tr>
+			        <td><%= wallet.public_address %></td>
+			        <td><%= wallet.tag %></td>
+			        <td><%= link_to 'Show', wallet %></td>
+			      </tr>
+			    <% end %>
+			  </tbody>
+			</table>
 
 	  </div>
 </div>

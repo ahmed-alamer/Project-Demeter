@@ -23,7 +23,7 @@
 
 	<p>
 	  <strong>Owner:</strong>
-	  <%= @wallet.claimant.name %>
+	  <%= @wallet.claimant.first_name + " " + @wallet.claimant.last_name %>
 	</p>
 
 	<%= link_to 'Edit', edit_wallet_path(@wallet) %> |
