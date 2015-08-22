@@ -11,27 +11,49 @@
     </div>
     <div class="panel-body">
       <p>
-        <strong>Entry date:</strong>
-        <%= @grant.entry_date %>
+        <strong>GUID:</strong>
+        <%= @grant.GUID %>
       </p>
 
       <p>
         <strong>Amount:</strong>
-        <%= @grant.amount %>
-      </p>
-
-      <p>
-        <strong>Project:</strong>
-        <%= @grant.project.name %>
+        <%= solar_coin_amount(@grant.amount) %>
       </p>
 
       <p>
         <strong>Receiver wallet:</strong>
-        <%= @grant.receiver_wallet %>
+        <%= @grant.wallet.public_address %>
       </p>
+      <% if @grant.bounties.size != 0 %>
+        <hr/>
+        <h5>Bounties</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>GUID</th>
+              <th>Amount</th>
+              <th>Receiver wallet</th>
+              <th>Grant GUID</th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
 
-      <%= link_to 'Edit', edit_grant_path(@grant) %> |
-      <%= link_to 'Back', grants_path %>
+          <tbody>
+            <% @grant.bounties.each do |bounty| %>
+              <tr>
+                <td><%= bounty.GUID %></td>
+                <td><%= solar_coin_amount(bounty.amount) %></td>
+                <td><%= bounty.wallet.public_address %></td>
+                <td><%= bounty.grant.GUID %></td>
+                <td><%= link_to 'Show', bounty %></td>
+                <td><%= link_to 'Edit', edit_bounty_path(bounty) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
 
-    </div>
+      <%= link_to 'Edit', edit_grant_path(@grant) %> | 
+      <%= link_to 'Back', grants_path %>  
+    </div>    
 </div>

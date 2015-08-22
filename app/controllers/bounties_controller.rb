@@ -1,5 +1,6 @@
 class BountiesController < ApplicationController
   before_action :set_bounty, only: [:show, :edit, :update, :destroy]
+  after_action :set_guid, only: [:create, :update]
 
   # GET /bounties
   # GET /bounties.json
@@ -67,8 +68,14 @@ class BountiesController < ApplicationController
       @bounty = Bounty.find(params[:id])
     end
 
+    def set_guid
+      grant = @bounty.grant
+      @bounty.GUID = "BGRT-#{grant.project.country}-#{grant.project.post_code}-#{grant.project.id}-#{grant.project.nameplate}-#{grant.project.install_date.to_formatted_s(:iso8601)}"
+      @bounty.save
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def bounty_params
-      params.require(:bounty).permit(:GUID, :entry_date, :amount, :receiver_wallet, :grant_id)
+      params.require(:bounty).permit(:GUID, :amount, :receiver_wallet, :grant_id)
     end
 end

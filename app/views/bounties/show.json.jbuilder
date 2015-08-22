@@ -1,1 +1,4 @@
-json.extract! @bounty, :id, :GUID, :entry_date, :amount, :receiver_wallet, :grant_id, :created_at, :updated_at
+	json.GUID @bounty.GUID
+	json.grant @bounty.grant.GUID
+	json.amount @bounty.amount
+	json.receiver_wallet @bounty.wallet.public_address

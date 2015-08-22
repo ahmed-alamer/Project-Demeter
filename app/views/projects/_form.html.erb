@@ -16,9 +16,6 @@
           </div>
         <% end %>
 
-        <div class="field">
-          <%= f.text_field :GUID, :label => "GUID" %>
-        </div>
         <div id="bloodhound">
           <%= f.text_field :claimant_id%>
         </div>
@@ -47,38 +44,6 @@
       <% end %>
     </div>
     <script type="text/javascript">
-      
-      var theFuckingClaimants = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: {
-          url: '/claimants.json'
-        }
-      });
-      // $("#project_claimant_id").typeahead({
-      //   hint: true,
-      //   highlight: true,
-      //   minLength: 1
-      // },
-      // {
-      //     name: 'projects',
-      //     displayKey: 'id',
-      //     source: theFuckingClaimants.ttAdapter(),
-      //     templates: {
-      //         suggestion: function (project) {
-      //             return '<p>' + project.name + '</p>';
-      //         }
-      //     }
-      // });
-      $('#project_claimant_id').typeahead({
-        hint: true,
-        highlight: true,
-        minLength: 1
-      },
-      {
-        name: 'projects',
-        displayKey: "name",
-        source: theFuckingClaimants
-      });
+      bindTypeaheadFullName("project_claimant_id", "claimants");
     </script>
 </div>

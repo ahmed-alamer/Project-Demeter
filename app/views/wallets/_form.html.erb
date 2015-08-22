@@ -22,21 +22,5 @@
 </div>
 
 <script type="text/javascript">
-  var claimants = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: '/claimants.json'
-    }
-  });
-  $('#wallet_claimant_id').typeahead({
-    hint: true,
-    highlight: true,
-    minLength: 1
-  },
-  {
-    name: 'claimants',
-    displayKey: "name",
-    source: claimants
-  });
+  bindTypeaheadFullName("wallet_claimant_id", "claimants");
 </script>

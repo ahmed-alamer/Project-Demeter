@@ -14,9 +14,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Name</th>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
           <th>Emai</th>
-          <th>Address</th>
           <th>Country</th>
           <th colspan="2"></th>
         </tr>
@@ -25,9 +26,10 @@
       <tbody>
         <% @claimants.each do |claimant| %>
           <tr>
-            <td><%= claimant.name %></td>
+            <td><%= claimant.id %></td>
+            <td><%= claimant.first_name %></td>
+            <td><%= claimant.last_name %></td>
             <td><%= claimant.email %></td>
-            <td><%= claimant.address %></td>
             <td><%= claimant.country %></td>
             <td><%= link_to 'Show', claimant %></td>
             <td><%= link_to 'Edit', edit_claimant_path(claimant) %></td>

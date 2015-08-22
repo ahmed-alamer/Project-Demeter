@@ -17,23 +17,18 @@
       </p>
 
       <p>
-        <strong>Entry date:</strong>
-        <%= @bounty.entry_date %>
-      </p>
-
-      <p>
         <strong>Amount:</strong>
-        <%= @bounty.amount %>
+        <%= solar_coin_amount(@bounty.amount) %>
       </p>
 
       <p>
         <strong>Receiver wallet:</strong>
-        <%= @bounty.receiver_wallet %>
+        <%= @bounty.wallet.public_address %>
       </p>
 
       <p>
         <strong>Grant:</strong>
-        <%= @bounty.grant_id %>
+        <%= @bounty.grant.GUID %>
       </p>
 
       <%= link_to 'Edit', edit_bounty_path(@bounty) %> |

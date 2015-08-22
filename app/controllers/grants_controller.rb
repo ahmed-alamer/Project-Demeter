@@ -1,11 +1,15 @@
 class GrantsController < ApplicationController
   before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :get_project, only: [:create, :update]
+  after_action :set_guid, only: [:create, :update]
 
   # GET /grants
   # GET /grants.json
   def index
     @grants = Grant.all
+    @periodic_grants = Grant.where(:type_tag => "PGRT")
+    @adjustment_grants = Grant.where(:type_tag => "AGRT")
+    @bounties = Bounty.all
   end
 
   # GET /grants/1
@@ -74,8 +78,13 @@ class GrantsController < ApplicationController
       params[:grant][:project_id] = project.id
     end
 
+    def set_guid
+      @grant.GUID = "#{@grant.type_tag}-#{@grant.project.country}-#{@grant.project.post_code}-#{@grant.project.id}-#{@grant.project.nameplate}-#{@grant.project.claimant_id}-#{@grant.project.install_date.to_formatted_s(:iso8601)}-#{@grant.created_at.strftime('%Y-%m-%d')}"
+      @grant.save
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def grant_params
-      params.require(:grant).permit(:entry_date, :amount, :project_id, :receiver_wallet)
+      params.require(:grant).permit(:amount, :type_tag, :project_id, :receiver_wallet)
     end
 end
