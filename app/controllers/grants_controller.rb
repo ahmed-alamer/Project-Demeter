@@ -1,6 +1,7 @@
 class GrantsController < ApplicationController
   before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :get_project, only: [:create, :update]
+  before_action :set_receiver_wallet, only: [:create, :update]
   after_action :set_guid, only: [:create, :update]
 
   # GET /grants
@@ -76,6 +77,10 @@ class GrantsController < ApplicationController
     def get_project
       project = Project.where(:name => grant_params[:project_id]).take
       params[:grant][:project_id] = project.id
+    end
+
+    def set_receiver_wallet
+      params[:grant][:receiver_wallet] = Wallet.where(:tag => grant_params[:receiver_wallet]).first.id
     end
 
     def set_guid
