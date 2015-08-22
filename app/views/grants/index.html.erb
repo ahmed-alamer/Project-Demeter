@@ -13,29 +13,75 @@
       <span class="pull-right">
         <%= link_to 'New Grant', new_grant_path, :class => "btn btn-primary" %>
       </span>
-    </div>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Entry date</th>
-          <th>Amount</th>
-          <th>Project</th>
-          <th>Receiver wallet</th>
-          <th colspan="2"></th>
-        </tr>
-      </thead>
+      <br/>
+      <div role="tabpanel">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                  <a href="#Pending" aria-controls="Pending" role="tab" data-toggle="tab">Pending</a>
+              </li>
+              <li role="presentation">
+                  <a href="#Periodic" aria-controls="Periodic" role="tab" data-toggle="tab">Periodic</a>
+              </li>
+              <li role="presentation">
+                  <a href="#Adjustment" aria-controls="Adjustment" role="tab" data-toggle="tab">Adjustment</a>
+              </li>
+          </ul>
 
-      <tbody>
-        <% @grants.each do |grant| %>
-          <tr>
-            <td><%= grant.entry_date %></td>
-            <td><%= grant.amount %></td>
-            <td><%= grant.project_id %></td>
-            <td><%= grant.receiver_wallet %></td>
-            <td><%= link_to 'Show', grant %></td>
-            <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+          <!-- Tab panes -->
+          <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="Pending">
+                
+              </div>
+              <div role="tabpanel" class="tab-pane" id="Periodic">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>GUID</th>
+                      <th>Receiver wallet</th>
+                      <th>Amount</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @periodic_grants.each do |grant| %>
+                      <tr>
+                        <td><%= grant.GUID %></td>
+                        <td><%= grant.wallet.public_address %></td>
+                        <td><%= number_with_delimiter(grant.amount) %> SLR</td>
+                        <td><%= link_to 'Show', grant %></td>
+                        <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="Adjustment">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>GUID</th>
+                      <th>Receiver wallet</th>
+                      <th>Amount</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @adjustment_grants.each do |grant| %>
+                      <tr>
+                        <td><%= grant.GUID %></td>
+                        <td><%= grant.wallet.public_address %></td>
+                        <td><%= number_with_delimiter(grant.amount) %> SLR</td>
+                        <td><%= link_to 'Show', grant %></td>
+                        <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+      </div>
+    </div>
 </div>

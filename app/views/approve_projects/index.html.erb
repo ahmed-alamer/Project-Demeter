@@ -6,8 +6,7 @@
 	  	<table class="table table-hover table-responsive">
 	  	  <thead>
 	  	    <tr>
-	  	    	<th>ID</th>
-	  	      <th>GUID</th>
+	  	    	<th>Generator ID</th>
 	  	      <th>Claimant</th>
 	  	      <th>Name</th>
 	  	      <th>Nameplate</th>
@@ -24,8 +23,7 @@
 	  	    <% @projects.each do |project| %>
 	  	      <tr>
 	  	      	<td name="id"><%= project.id %></td>
-	  	        <td><%= project.GUID %></td>
-	  	        <td><%= project.claimant.name %></td>
+	  	        <td><%= project.claimant.email %></td>
 	  	        <td><%= project.name %></td>
 	  	        <td><%= project.nameplate %></td>
 	  	        <td><%= project.address %></td>

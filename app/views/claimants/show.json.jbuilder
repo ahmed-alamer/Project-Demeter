@@ -1,1 +1,1 @@
-json.extract! @claimant, :id, :name, :email, :address, :country, :created_at, :updated_at
+json.extract! @claimant, :id, :first_name, :last_name, :email, :country, :created_at, :updated_at

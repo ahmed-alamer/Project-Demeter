@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150816005613) do
+ActiveRecord::Schema.define(version: 20150822041857) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -30,32 +30,31 @@ ActiveRecord::Schema.define(version: 20150816005613) do
   end
 
   create_table "claimants", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "first_name", limit: 255
     t.string   "email",      limit: 255
-    t.string   "address",    limit: 255
     t.string   "country",    limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "last_name",  limit: 255
   end
 
   create_table "grants", force: :cascade do |t|
-    t.string   "entry_date",      limit: 255
     t.decimal  "amount",                      precision: 10
     t.integer  "project_id",      limit: 4
     t.string   "receiver_wallet", limit: 255
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
     t.string   "type_tag",        limit: 255,                default: "PGRT"
+    t.string   "GUID",            limit: 255
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "GUID",         limit: 255
     t.string   "name",         limit: 255
     t.decimal  "nameplate",                precision: 10
     t.string   "address",      limit: 255
     t.string   "post_code",    limit: 255
     t.string   "country",      limit: 255
-    t.string   "install_date", limit: 255
+    t.date     "install_date"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.integer  "claimant_id",  limit: 4

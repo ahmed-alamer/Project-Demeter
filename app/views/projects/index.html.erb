@@ -13,38 +13,186 @@
         <%= link_to 'New Project', new_project_path, :class => "btn btn-primary" %>
         <%= link_to "Approve Projects", approve_projects_path, :class => "btn btn-success" %>
       </span>
+      <br/>
+      <div role="tabpanel">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                  <a href="#Pending" aria-controls="Pending" role="tab" data-toggle="tab">Pending</a>
+              </li>
+              <li role="presentation">
+                  <a href="#Approved" aria-controls="Approved" role="tab" data-toggle="tab">Approved</a>
+              </li>
+              <li role="presentation">
+                  <a href="#Rejected" aria-controls="Rejected" role="tab" data-toggle="tab">Rejected</a>
+              </li>
+              <li role="presentation">
+                  <a href="#All" aria-controls="All" role="tab" data-toggle="tab">All</a>
+              </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+              <!-- Pending Projects -->
+              <div role="tabpanel" class="tab-pane active" id="Pending">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Generator ID</th>
+                      <th>Cliamant Email</th>
+                      <th>Claimant ID</th>
+                      <th>Status</th>
+                      <th>Name</th>
+                      <th>Nameplate</th>
+                      <th>Address</th>
+                      <th>Post code</th>
+                      <th>Country</th>
+                      <th>Install date</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @pending_projects.each do |project| %>
+                      <tr>
+                        <td><%= project.id %></td>
+                        <td><%= project.claimant.email %></td>
+                        <td><%= project.claimant_id %></td>
+                        <td><%= project.status == "P" ? "Pending" : project.status %></td>
+                        <td><%= project.name %></td>
+                        <td><%= number_to_human(project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %></td>
+                        <td><%= project.address %></td>
+                        <td><%= project.post_code %></td>
+                        <td><%= project.country %></td>
+                        <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
+                        <td><%= link_to 'Show', project %></td>
+                        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>                
+              </div>
+              <!-- Approved Projects -->
+              <div role="tabpanel" class="tab-pane" id="Approved">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Generator ID</th>
+                      <th>Cliamant Email</th>
+                      <th>Claimant ID</th>
+                      <th>Status</th>
+                      <th>Name</th>
+                      <th>Nameplate</th>
+                      <th>Address</th>
+                      <th>Post code</th>
+                      <th>Country</th>
+                      <th>Install date</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @approved_projects.each do |project| %>
+                      <tr>
+                        <td><%= project.id %></td>
+                        <td><%= project.claimant.email %></td>
+                        <td><%= project.claimant_id %></td>
+                        <td><%= project.status == "P" ? "Pending" : project.status %></td>
+                        <td><%= project.name %></td>
+                        <td><%= number_to_human(project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %></td>
+                        <td><%= project.address %></td>
+                        <td><%= project.post_code %></td>
+                        <td><%= project.country %></td>
+                        <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
+                        <td><%= link_to 'Show', project %></td>
+                        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Rejected Projects -->
+              <div role="tabpanel" class="tab-pane" id="Rejected">
+                <br/>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Generator ID</th>
+                      <th>Cliamant Email</th>
+                      <th>Claimant ID</th>
+                      <th>Status</th>
+                      <th>Name</th>
+                      <th>Nameplate</th>
+                      <th>Address</th>
+                      <th>Post code</th>
+                      <th>Country</th>
+                      <th>Install date</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @rejected_projects.each do |project| %>
+                      <tr>
+                        <td><%= project.id %></td>
+                        <td><%= project.claimant.email %></td>
+                        <td><%= project.claimant_id %></td>
+                        <td><%= project.status == "P" ? "Pending" : project.status %></td>
+                        <td><%= project.name %></td>
+                        <td><%= number_to_human(project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %></td>
+                        <td><%= project.address %></td>
+                        <td><%= project.post_code %></td>
+                        <td><%= project.country %></td>
+                        <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
+                        <td><%= link_to 'Show', project %></td>
+                        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- All Projects -->
+              <div role="tabpanel" class="tab-pane" id="All">
+                <br/>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Generator ID</th>
+                      <th>Cliamant Email</th>
+                      <th>Claimant ID</th>
+                      <th>Status</th>
+                      <th>Name</th>
+                      <th>Nameplate</th>
+                      <th>Address</th>
+                      <th>Post code</th>
+                      <th>Country</th>
+                      <th>Install date</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @projects.each do |project| %>
+                      <tr>
+                        <td><%= project.id %></td>
+                        <td><%= project.claimant.email %></td>
+                        <td><%= project.claimant_id %></td>
+                        <td><%= project.status == "P" ? "Pending" : project.status %></td>
+                        <td><%= project.name %></td>
+                        <td><%= number_to_human(project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %></td>
+                        <td><%= project.address %></td>
+                        <td><%= project.post_code %></td>
+                        <td><%= project.country %></td>
+                        <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
+                        <td><%= link_to 'Show', project %></td>
+                        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+      </div>
     </div>
-
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>GUID</th>
-          <th>Status</th>
-          <th>Name</th>
-          <th>Nameplate</th>
-          <th>Address</th>
-          <th>Post code</th>
-          <th>Country</th>
-          <th>Install date</th>
-          <th colspan="2"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @projects.each do |project| %>
-          <tr>
-            <td><%= project.GUID %></td>
-            <td><%= project.status == "P" ? "Pending" : project.status %></td>
-            <td><%= project.name %></td>
-            <td><%= project.nameplate %></td>
-            <td><%= project.address %></td>
-            <td><%= project.post_code %></td>
-            <td><%= project.country %></td>
-            <td><%= project.install_date %></td>
-            <td><%= link_to 'Show', project %></td>
-            <td><%= link_to 'Edit', edit_project_path(project) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
 </div>
+
