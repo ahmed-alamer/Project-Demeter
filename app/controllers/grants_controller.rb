@@ -9,6 +9,7 @@ class GrantsController < ApplicationController
     @grants = Grant.all
     @periodic_grants = Grant.where(:type_tag => "PGRT")
     @adjustment_grants = Grant.where(:type_tag => "AGRT")
+    @bounties = Bounty.all
   end
 
   # GET /grants/1

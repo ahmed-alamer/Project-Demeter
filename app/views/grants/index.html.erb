@@ -8,7 +8,7 @@
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Panel heading</div>
+  <div class="panel-heading">Grants</div>
     <div class="panel-body">
       <span class="pull-right">
         <%= link_to 'New Grant', new_grant_path, :class => "btn btn-primary" %>
@@ -18,22 +18,19 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active">
-                  <a href="#Pending" aria-controls="Pending" role="tab" data-toggle="tab">Pending</a>
-              </li>
-              <li role="presentation">
                   <a href="#Periodic" aria-controls="Periodic" role="tab" data-toggle="tab">Periodic</a>
               </li>
               <li role="presentation">
                   <a href="#Adjustment" aria-controls="Adjustment" role="tab" data-toggle="tab">Adjustment</a>
               </li>
+              <li role="presentation">
+                  <a href="#Bounty" aria-controls="Bounty" role="tab" data-toggle="tab">Bounty Grants</a>
+              </li>
           </ul>
 
           <!-- Tab panes -->
           <div class="tab-content">
-              <div role="tabpanel" class="tab-pane active" id="Pending">
-                
-              </div>
-              <div role="tabpanel" class="tab-pane" id="Periodic">
+              <div role="tabpanel" class="tab-pane active" id="Periodic">
                 <table class="table table-hover">
                   <thead>
                     <tr>
@@ -49,7 +46,7 @@
                       <tr>
                         <td><%= grant.GUID %></td>
                         <td><%= grant.wallet.public_address %></td>
-                        <td><%= number_with_delimiter(grant.amount) %> SLR</td>
+                        <td><%= solar_coin_amount(grant.amount) %></td>
                         <td><%= link_to 'Show', grant %></td>
                         <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
                       </tr>
@@ -61,6 +58,7 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
+                      <th></th>
                       <th>GUID</th>
                       <th>Receiver wallet</th>
                       <th>Amount</th>
@@ -71,11 +69,41 @@
                   <tbody>
                     <% @adjustment_grants.each do |grant| %>
                       <tr>
-                        <td><%= grant.GUID %></td>
+                        <td><%= grant.GUID %> <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>" style="color:lime"></span></td>
                         <td><%= grant.wallet.public_address %></td>
-                        <td><%= number_with_delimiter(grant.amount) %> SLR</td>
+                        <td><%= solar_coin_amount(grant.amount) %></td>
                         <td><%= link_to 'Show', grant %></td>
                         <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="Bounty">
+                <div class="pull-right">
+                  <%= link_to 'New Bounty', new_bounty_path, :class => "btn btn-primary" %>
+                </div>
+                <br/>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>GUID</th>
+                      <th>Amount</th>
+                      <th>Receiver wallet</th>
+                      <th>Grant GUID</th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @bounties.each do |bounty| %>
+                      <tr>
+                        <td><%= bounty.GUID %></td>
+                        <td><%= bounty.wallet.public_address %></td>
+                        <td><%= solar_coin_amount(bounty.amount) %></td>
+                        <td><%= bounty.grant.GUID %></td>
+                        <td><%= link_to 'Show', bounty %></td>
+                        <td><%= link_to 'Edit', edit_bounty_path(bounty) %></td>
                       </tr>
                     <% end %>
                   </tbody>
