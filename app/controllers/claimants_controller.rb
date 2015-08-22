@@ -69,6 +69,6 @@ class ClaimantsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def claimant_params
-      params.require(:claimant).permit(:name, :email, :address, :country)
+      params.require(:claimant).permit(:first_name, :last_name, :email, :country)
     end
 end
