@@ -5,10 +5,9 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
-    @approved_projects = Project.where(:status => "A1")
-    @pending_projects = Project.where(:status => "P")
-    @rejected_projects = Project.where("status LIKE 'R%'")
+    @view_items = if params[:status] then params[:status] else "P" end
+
+    @projects = Project.where("status LIKE '#{@view_items}%'")
   end
 
   # GET /projects/1
