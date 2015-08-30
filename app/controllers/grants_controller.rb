@@ -88,12 +88,12 @@ class GrantsController < ApplicationController
     end
 
     def set_guid
-      if grant.type_tag == "AGRT"
-        install_date = install_date.advance(:months => 6)
+      if @grant.type_tag == "AGRT"
+        install_date = Project.find(@grant.project.id).install_date.advance(:months => 6)
         next_anniversary = Date.new(Date.today.year, install_date.month, install_date.day)
         prevDiff = Date.today - next_anniversary
         nextDiff = next_anniversary.advance(:months => 6) - Date.today
-        grant.created_at = next_anniversary.change(:days => (nextDiff > prevDiff ? nextDiff : prevDiff).to_i)
+        @grant.created_at = next_anniversary.change(:days => (nextDiff > prevDiff ? nextDiff : prevDiff).to_i)
       end
       @grant.GUID = "#{@grant.type_tag}-#{@grant.project.country}-#{@grant.project.post_code}-#{@grant.project.id}-#{@grant.project.nameplate}-#{@grant.project.claimant_id}-#{@grant.project.install_date.to_formatted_s(:iso8601)}-#{@grant.created_at.strftime('%Y-%m-%d')}"
       @grant.save
