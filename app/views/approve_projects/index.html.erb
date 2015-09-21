@@ -14,6 +14,7 @@
 	  	      <th>Post code</th>
 	  	      <th>Country</th>
 	  	      <th>Install date</th>
+	  	      <th>Documentation</th>
 	  	      <th>Status</th>
 	  	      <th></th>
 	  	    </tr>
@@ -30,6 +31,7 @@
 	  	        <td><%= project.post_code %></td>
 	  	        <td><%= project.country %></td>
 	  	        <td><%= project.install_date %></td>
+	  	        <td><%= project.documentation %></td>
 	  	        <td>
 	  	        	<select id="approvalCode<%=project.id%>">
 	  	        		<option value="<%= project.approval_status.code %>">
