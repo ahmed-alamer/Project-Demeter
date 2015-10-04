@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921011541) do
+ActiveRecord::Schema.define(version: 20150928001232) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150921011541) do
     t.datetime "updated_at",                                                  null: false
     t.string   "type_tag",        limit: 255,                default: "PGRT"
     t.string   "GUID",            limit: 255
+    t.date     "grant_date"
   end
 
   create_table "projects", force: :cascade do |t|

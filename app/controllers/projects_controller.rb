@@ -7,7 +7,11 @@ class ProjectsController < ApplicationController
   def index
     @view_items = if params[:status] then params[:status] else "P" end
 
-    @projects = Project.where("status LIKE '#{@view_items}%'")
+    respond_to do |format|
+      format.html { @projects = Project.where("status LIKE '#{@view_items}%'") }
+      format.json { @projects = Project.where("status LIKE 'A%'") }
+    end
+
   end
 
   # GET /projects/1

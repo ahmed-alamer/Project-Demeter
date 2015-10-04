@@ -89,14 +89,47 @@ class GrantsController < ApplicationController
 
     def set_guid
       if @grant.type_tag == "AGRT"
-        install_date = Project.find(@grant.project.id).install_date.advance(:months => 6)
-        next_anniversary = Date.new(Date.today.year, install_date.month, install_date.day)
-        prevDiff = Date.today - next_anniversary
-        nextDiff = next_anniversary.advance(:months => 6) - Date.today
-        @grant.created_at = next_anniversary.change(:days => (nextDiff > prevDiff ? nextDiff : prevDiff).to_i)
+        install_date = Project.find(@grant.project.id).install_date
+        @grant.grant_date = adjust_date(install_date)
       end
+
       @grant.GUID = "#{@grant.type_tag}-#{@grant.project.country}-#{@grant.project.post_code}-#{@grant.project.id}-#{@grant.project.nameplate}-#{@grant.project.claimant_id}-#{@grant.project.install_date.to_formatted_s(:iso8601)}-#{@grant.created_at.strftime('%Y-%m-%d')}"
       @grant.save
+    end
+
+    def set_grant_date
+      if @grant.type_tag == "AGRT"
+        @grant.grant_date = get_adjustment_date(@grant.project.install_date)
+      else
+        @grant.grant_date = Date.today
+      end
+    end
+
+    def adjust_date(install_month)
+      calc_month = nil
+      six_months = Date.new
+
+      if install_month.month <= 6 
+        calc_month = install_month
+      else
+        calc_month = install_month.advance(:months => 6)
+      end
+
+      if Date.today.month >= calc_month.month && Date.today.month <= calc_month.advance(:months => 6).month
+        six_months = Date.new(six_months.year, calc_month.month, six_months.day)
+      else
+        six_months = calc_month.advance(:months => 6)
+      end
+
+      if Date.today.month > 6
+        calc_month = Date.new(Date.today.year, calc_month.month, 1)
+      elsif calc_month.month == six_months.month 
+        calc_month = Date.new(Date.today.year, calc_month.month, 1)
+      else
+        calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
+      end
+      
+      calc_month
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

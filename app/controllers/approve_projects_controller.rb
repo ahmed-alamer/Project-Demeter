@@ -1,7 +1,7 @@
 class ApproveProjectsController < ApplicationController
 
   def index
-		@projects = Project.where.not(:status => "A1")  
+		@projects = Project.where(:status => "P")  
   end
 
   def create
