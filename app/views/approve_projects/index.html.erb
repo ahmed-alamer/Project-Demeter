@@ -33,7 +33,7 @@
 	  	        <td><%= project.install_date %></td>
 	  	        <td><%= project.documentation %></td>
 	  	        <td>
-	  	        	<select id="approvalCode<%=project.id%>">
+	  	        	<select id="approvalCode<%=project.id%>" class="form-control">
 	  	        		<option value="<%= project.approval_status.code %>">
 	  	        			<%= project.approval_status.details %>
 	  	        		</option>
@@ -82,7 +82,7 @@
 			data: JSON.stringify({"approved_projects": approvedProjects}),
 			success: function(result) {
 				console.log(result);
-				location.reload();
+				window.location = "/approve_projects/queue";
 			},
 			error: function(error) {
 				console.log(error);

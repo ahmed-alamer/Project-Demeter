@@ -16,7 +16,7 @@ class GrantsController < ApplicationController
       @grants = Grant.where(:type_tag => @view_items)
     end
   end
-
+  
   # GET /grants/1
   # GET /grants/1.json
   def show
@@ -131,7 +131,7 @@ class GrantsController < ApplicationController
       
       calc_month
     end
-
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def grant_params
       params.require(:grant).permit(:amount, :type_tag, :project_id, :receiver_wallet)

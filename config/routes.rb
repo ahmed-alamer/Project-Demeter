@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'approve_projects/index'
 
   resources :approve_projects
+  get 'approve_projects/queue' => "approve_projects#adjstment_grants_queue"
   
   resources :approval_statuses
   resources :wallets
