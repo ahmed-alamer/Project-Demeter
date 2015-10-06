@@ -11,9 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928001232) do
+ActiveRecord::Schema.define(version: 20151005040902) do
 
-  create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
+  create_table "approval_statuses", force: :cascade do |t|
+    t.string   "code",       limit: 255
     t.string   "details",    limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
@@ -49,17 +50,17 @@ ActiveRecord::Schema.define(version: 20150928001232) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",          limit: 255
-    t.decimal  "nameplate",                 precision: 10
-    t.string   "address",       limit: 255
-    t.string   "post_code",     limit: 255
-    t.string   "country",       limit: 255
+    t.string   "name",               limit: 255
+    t.decimal  "nameplate",                      precision: 10
+    t.string   "address",            limit: 255
+    t.string   "post_code",          limit: 255
+    t.string   "country",            limit: 255
     t.date     "install_date"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "claimant_id",   limit: 4
-    t.string   "status",        limit: 255,                default: "P"
-    t.string   "documentation", limit: 255
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.integer  "claimant_id",        limit: 4
+    t.integer  "approval_status_id", limit: 4,                  default: 0
+    t.string   "documentation",      limit: 255
   end
 
   create_table "wallets", force: :cascade do |t|

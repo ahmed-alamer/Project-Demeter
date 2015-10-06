@@ -8,7 +8,11 @@ class GrantsController < ApplicationController
   # GET /grants.json
   def index
     # So whoever reads this code, please, if you know a better way to do this pull it!
-    @view_items = if params[:view] then params[:view] else "AGRT" end
+    @view_items = if params[:view]
+                    params[:view]
+                  else
+                    'AGRT'
+                  end
 
     if @view_items == "BGRT"
       @grants = Bounty.all
@@ -99,7 +103,7 @@ class GrantsController < ApplicationController
 
     def set_grant_date
       if @grant.type_tag == "AGRT"
-        @grant.grant_date = get_adjustment_date(@grant.project.install_date)
+        @grant.grant_date = adjust_date(@grant.project.install_date)
       else
         @grant.grant_date = Date.today
       end
