@@ -1,0 +1,46 @@
+<% if notice %>
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"> <%= get_panel_title(@view_items) %> Grants</div>
+    <div class="panel-body">
+      <span class="pull-right">
+        <%= link_to 'New Grant', new_grant_path, :class => "btn btn-primary" %>
+      </span>
+      <br/>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>GUID</th>
+            <th>Receiver wallet</th>
+            <th>Amount</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @grants.each do |grant| %>
+            <tr>
+              <td>
+                <%= grant.GUID %> 
+                <!-- So it won't hit the database for each non-adjustment grant -->
+                <% if @view_items == "AGRT" %>
+                  <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>" style="color:lime"></span>
+                <% end %>
+              </td>
+              <td><%= grant.wallet.public_address %></td>
+              <td><%= solar_coin_amount(grant.amount) %></td>
+              <td><%= link_to 'Show', grant %></td>
+              <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+</div>

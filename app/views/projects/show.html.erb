@@ -1,0 +1,63 @@
+<% if notice %>
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p id="notice"><%= notice %></p>
+</div>
+<br/>
+<% end %>
+<br/>
+<div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Project Details</h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <strong>Generator ID:</strong>
+        <%= @project.claimant_id %>
+      </p>
+
+      <p>
+        <strong>Claimant Name:</strong>
+        <%= @project.claimant.first_name + " " + @project.claimant.last_name %>
+      </p>
+
+      <p>
+        <strong>Claimant Email:</strong>
+        <%= @project.claimant.email %>
+      </p>
+
+      <p>
+        <strong>Name:</strong>
+        <%= @project.name %>
+      </p>
+
+      <p>
+        <strong>Nameplate:</strong>
+        <%= number_to_human(@project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %>
+      </p>
+
+      <p>
+        <strong>Address:</strong>
+        <%= @project.address %>
+      </p>
+
+      <p>
+        <strong>Post code:</strong>
+        <%= @project.post_code %>
+      </p>
+
+      <p>
+        <strong>Country:</strong>
+        <%= @project.country %>
+      </p>
+
+      <p>
+        <strong>Install date:</strong>
+        <%= @project.install_date.strftime("%Y-%m-%d") %>
+      </p>
+
+      <%= link_to 'Edit', edit_project_path(@project) %> |
+      <%= link_to 'Back', projects_path %>
+
+    </div>
+</div>
