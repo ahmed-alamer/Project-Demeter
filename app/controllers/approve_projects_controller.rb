@@ -1,7 +1,7 @@
 class ApproveProjectsController < ApplicationController
 
   def index
-		@projects = Project.where(:status => "P")  
+		@projects = Project.where(:status => 'P')
   end
 
   def create
@@ -19,11 +19,12 @@ class ApproveProjectsController < ApplicationController
 			project_entity.save
 		end
 		
-    render json: {"answer": "success"}
+    render json: {'answer': 'success'}
   end
 
   def show
-    approved_projects = Project.where(["status = 'A1' and updated_at >= ?", Date.today])
+    # approved_projects = Project.where(["status = 'A1' and updated_at >= ?", Date.today])
+    approved_projects = Project.where(:status =>  'A1').where('updated_at >= ?', Date.today)
     @adjustment_grants = Array.new
     
     approved_projects.each do |project|
@@ -31,13 +32,13 @@ class ApproveProjectsController < ApplicationController
       grant.amount = calculate_grant_amount project #this should be calculated as the excel sheet, later!
       grant.project = project
       grant.wallet = project.claimant.wallets.first #considering the first wallet to be the default
-      grant.type_tag = "AGRT"
+      grant.type_tag = 'AGRT'
       grant.grant_date = adjust_date(project.install_date)
       @adjustment_grants << grant
     end
   end
 
-  def submit_adjutment_grants
+  def submit_adjustment_grants
     #todo: read the values of the request body and create grants and save them
   end
 

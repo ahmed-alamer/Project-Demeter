@@ -72,11 +72,11 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
-      @project.claimant_id = @project.claimant.first_name + " " + @project.claimant.last_name
+      @project.claimant_id = @project.claimant.first_name + ' ' + @project.claimant.last_name
     end
 
     def get_claimant
-      full_name = project_params[:claimant_id].split(" ")
+      full_name = project_params[:claimant_id].split(' ')
       claimant = Claimant.where(:first_name => full_name[0], :last_name => full_name[1]).take
       params[:project][:claimant_id] = claimant.id
     end
