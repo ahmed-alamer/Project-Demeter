@@ -1,0 +1,26 @@
+<div class="panel panel-`">
+	<div class="panel-body">
+	   <table class="table table-hover">
+	   	<thead>
+	   		<tr>
+          <th>Project</th>
+          <th>Amount</th>
+          <th>Receiver Wallet</th>
+          <th>Receiver Email</th>
+          <th>Type</th>
+	   		</tr>
+	   	</thead>
+	   	<tbody>
+	   		<% @adjustment_grants.each do |grant| %>
+		   		<tr>
+		   			<td><%= grant.project.name %></td>
+		   			<td><%= solar_coin_amount(grant.amount) %></td>
+		   			<td><%= grant.wallet.public_address %></td>
+            <td><%=	grant.wallet.claimant.email  %></td>
+		   			<td><%= grant.type_tag %></td> <!-- obviousely! -->
+		   		</tr>
+	   		<% end %>
+	   	</tbody>
+	   </table>
+	</div>
+</div>

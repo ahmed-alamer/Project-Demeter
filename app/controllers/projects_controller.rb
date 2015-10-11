@@ -5,9 +5,13 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @view_items = if params[:status] then params[:status] else "P" end
+    @view_items = params[:status] ? params[:status] : 'P'
 
-    @projects = Project.where("status LIKE '#{@view_items}%'")
+    respond_to do |format|
+      format.html { @projects = Project.where("status LIKE '#{@view_items}%'") }
+      format.json { @projects = Project.where("status LIKE 'A%'") }
+    end
+
   end
 
   # GET /projects/1
@@ -68,11 +72,11 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
-      @project.claimant_id = @project.claimant.first_name + " " + @project.claimant.last_name
+      @project.claimant_id = @project.claimant.first_name + ' ' + @project.claimant.last_name
     end
 
     def get_claimant
-      full_name = project_params[:claimant_id].split(" ")
+      full_name = project_params[:claimant_id].split(' ')
       claimant = Claimant.where(:first_name => full_name[0], :last_name => full_name[1]).take
       params[:project][:claimant_id] = claimant.id
     end
