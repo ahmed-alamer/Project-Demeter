@@ -1,3 +1,5 @@
+require 'csv'
+
 class ApproveProjectsController < ApplicationController
 
   def index
@@ -36,6 +38,15 @@ class ApproveProjectsController < ApplicationController
       grant.grant_date = adjust_date(project.install_date)
       @adjustment_grants << grant
     end
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{Date.today }-grants\""
+        # headers['Content-Type'] = 'text/csv'
+      end
+    end
+
   end
 
   def submit_adjustment_grants
