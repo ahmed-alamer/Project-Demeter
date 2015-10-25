@@ -3,32 +3,33 @@ require 'csv'
 class ApproveProjectsController < ApplicationController
 
   def index
-		@projects = Project.where(:status => 'P')
+    @projects = Project.where(:status => 'P')
   end
 
   def create
-  	"Data format expected: 
+    "Data format expected:
   	[
   		{
   			'projectId' : NUMBER,
   			'projectStatus': STATUS
   		}
   	]"
-		
-		params[:approved_projects].each do |project|
-			project_entity = Project.find(project[:project_id])
-			project_entity.approval_status = ApprovalStatus.find(project[:project_status])
-			project_entity.save
-		end
-		
+
+    params[:approved_projects].each do |project|
+      project_entity = Project.find(project[:project_id])
+      project_entity.approval_status = ApprovalStatus.find(project[:project_status])
+      project_entity.save
+    end
+
     render json: {'answer': 'success'}
   end
 
   def show
     # approved_projects = Project.where(["status = 'A1' and updated_at >= ?", Date.today])
-    approved_projects = Project.where(:status =>  'A1').where('updated_at >= ?', Date.today)
+    approved_projects = Project.where(:status => 'A1')
+                            .where('updated_at >= ?', Date.today)
     @adjustment_grants = Array.new
-    
+
     approved_projects.each do |project|
       grant = Grant.new
       grant.amount = calculate_grant_amount project #this should be calculated as the excel sheet, later!
@@ -42,7 +43,8 @@ class ApproveProjectsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"#{Date.today }-grants\""
+        file_name = "\"#{Date.today}-grants\""
+        headers['Content-Disposition'] = "attachment; filename=#{file_name}"
         # headers['Content-Type'] = 'text/csv'
       end
     end
@@ -58,7 +60,7 @@ class ApproveProjectsController < ApplicationController
     calc_month = nil
     six_months = Date.new
 
-    if install_month.month <= 6 
+    if install_month.month <= 6
       calc_month = install_month
     else
       calc_month = install_month.advance(:months => 6)
@@ -72,12 +74,12 @@ class ApproveProjectsController < ApplicationController
 
     if Date.today.month > 6
       calc_month = Date.new(Date.today.year, calc_month.month, 1)
-    elsif calc_month.month == six_months.month 
+    elsif calc_month.month == six_months.month
       calc_month = Date.new(Date.today.year, calc_month.month, 1)
     else
       calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
     end
-    
+
     calc_month
   end
 
