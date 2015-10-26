@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151025164525) do
+ActiveRecord::Schema.define(version: 20151026020903) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -21,11 +21,11 @@ ActiveRecord::Schema.define(version: 20151025164525) do
 
   create_table "bounties", force: :cascade do |t|
     t.string   "GUID",            limit: 255
-    t.decimal  "amount",                      precision: 10
+    t.decimal  "amount",                      precision: 10, scale: 6
     t.string   "receiver_wallet", limit: 255
     t.string   "grant_id",        limit: 255
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
   end
 
   create_table "claimants", force: :cascade do |t|
@@ -38,27 +38,27 @@ ActiveRecord::Schema.define(version: 20151025164525) do
   end
 
   create_table "grants", force: :cascade do |t|
-    t.decimal  "amount",                      precision: 10
+    t.decimal  "amount",                      precision: 10, scale: 6
     t.integer  "project_id",      limit: 4
     t.string   "receiver_wallet", limit: 255
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.string   "type_tag",        limit: 255,                default: "PGRT"
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
+    t.string   "type_tag",        limit: 255,                          default: "PGRT"
     t.string   "GUID",            limit: 255
     t.date     "grant_date"
   end
 
   create_table "projects", force: :cascade do |t|
     t.string   "name",          limit: 255
-    t.decimal  "nameplate",                 precision: 10
+    t.decimal  "nameplate",                 precision: 10, scale: 6
     t.string   "address",       limit: 255
     t.string   "post_code",     limit: 255
     t.string   "country",       limit: 255
     t.date     "install_date"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.integer  "claimant_id",   limit: 4
-    t.string   "status",        limit: 255,                default: "P"
+    t.string   "status",        limit: 255,                          default: "P"
     t.string   "documentation", limit: 255
     t.string   "city",          limit: 255
     t.string   "state",         limit: 255
