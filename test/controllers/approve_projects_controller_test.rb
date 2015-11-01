@@ -28,26 +28,30 @@ class ApproveProjectsControllerTest < ActionController::TestCase
  #  end
 
   test "Ahmed's Algorithm" do
-  	calc_month = nil
+  	# calc_month = nil
 
-  	date = Date.new(2009, 9, 3) #current date
-	
-	next_anniversary = Date.new(Date.today.year, date.month, date.day)
-	six_months  = next_anniversary.advance(:months => 6)
+    date = Date.new(2013, 12, 10) #current date
 
-	puts "Six months #{six_months}"
-	puts "Anniversary #{next_anniversary}"
+    if date.year < 2010
+      date = Date.new(2010, 1, 1)
+    end
 
-	if Date.today > six_months
-		puts "Grant Date is After the Six Months Anniversary"
-		calc_month = Date.new(six_months.year, six_months.month, 1)
-	else
-		puts "Grant Date is Before the Six Months Anniversary"
-		calc_month = Date.new(six_months.year - 1, six_months.month, 1) 
-		# Why is isn't there a retreat method!?
-	end
+    next_anniversary = Date.new(Date.today.year, date.month, date.day)
+    six_months = next_anniversary.advance(:months => 6)
 
-	puts "Ahmed Result = #{calc_month}"
+    puts "Six months #{six_months}"
+    puts "Anniversary #{next_anniversary}"
+
+    if Date.today > six_months
+      puts "Grant Date is After the Six Months Anniversary"
+      calc_month = Date.new(six_months.year, six_months.month, 1)
+    else
+      puts "Grant Date is Before the Six Months Anniversary"
+      calc_month = Date.new(six_months.year - 1, six_months.month, 1)
+      # Why is isn't there a retreat method!?
+    end
+
+    puts "Ahmed Result = #{calc_month}"
   end
 
   test "Joe's Algorithm" do
@@ -55,6 +59,10 @@ class ApproveProjectsControllerTest < ActionController::TestCase
   	six_months = Date.new
 
   	install_month =  Date.new(2009, 9, 3)
+
+    if install_month.year < 2010
+      install_month = Date.new(2010,1,1)
+    end
 
   	if install_month.month <= 6 
   		calc_month = install_month
