@@ -51,4 +51,4 @@ production:
   <<: *default
   database: Project-Demeter_production
   username: engine
-  password: <%= ENV['ENGINE_DATABASE_PASSWORD'] %>
+  password: kokojumbo_fucking_bullshit
