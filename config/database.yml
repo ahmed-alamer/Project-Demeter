@@ -50,5 +50,3 @@ test:
 production:
   <<: *default
   database: Project-Demeter_production
-  username: engine
-  password: kokojumbo_fucking_bullshit
