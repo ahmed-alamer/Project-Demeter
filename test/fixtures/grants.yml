@@ -1,15 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  entry_date: MyString
-  approval_code: MyString
   amount: 9.99
   project_id: MyString
   receiver_wallet: MyString
+  type_tag: AGRT
 
 two:
-  entry_date: MyString
-  approval_code: MyString
   amount: 9.99
   project_id: MyString
   receiver_wallet: MyString
+  type_tag: AGRT
