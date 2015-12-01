@@ -57,5 +57,33 @@
 			  </tbody>
 			</table>
 
+      <hr/>
+      <h5>Project</h5>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>Nameplate</th>
+          <th>Country</th>
+          <th>Install Date</th>
+          <th>Status</th>
+          <th>Docs</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @claimant.projects.each do |project| %>
+          <tr>
+            <td><%= project.nameplate %></td>
+            <td><%= project.country %></td>
+            <td><%= project.install_date %></td>
+            <td><%= project.status %></td>
+            <td><%= project.documentation %></td>
+            <td><%= link_to 'Show', project %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+
 	  </div>
 </div>

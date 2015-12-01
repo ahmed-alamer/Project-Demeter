@@ -56,6 +56,11 @@
         <%= @project.install_date.strftime("%Y-%m-%d") %>
       </p>
 
+      <p>
+        <strong>Documentation</strong>
+        <%= @project.documentation %>
+      </p>
+
       <%= link_to 'Edit', edit_project_path(@project) %> |
       <%= link_to 'Back', projects_path %>
 
