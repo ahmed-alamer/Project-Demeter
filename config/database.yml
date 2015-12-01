@@ -50,5 +50,5 @@ test:
 production:
   <<: *default
   database: Project-Demeter_production
-  username: Project-Demeter
+  username: engine
   password: <%= ENV['PROJECT-DEMETER_DATABASE_PASSWORD'] %>

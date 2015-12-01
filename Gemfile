@@ -34,8 +34,9 @@ gem 'bh', '~> 1.3.4'
 group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
+  gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'capistrano-rbenv', github: "capistrano/rbenv"
+  gem 'capistrano-rbenv'
 end
 
 group :development, :test do
