@@ -8,13 +8,13 @@ class GrantsController < ApplicationController
   # GET /grants.json
   def index
     # So whoever reads this code, please, if you know a better way to do this pull it!
-    @view_items = if params[:view] then
+    @view_items = if params[:view]
                     params[:view]
                   else
-                    "AGRT"
+                    'AGRT'
                   end
 
-    if @view_items == "BGRT"
+    if @view_items == 'BGRT'
       @grants = Bounty.all
     else
       @grants = Grant.where(:type_tag => @view_items)
@@ -104,48 +104,70 @@ class GrantsController < ApplicationController
   end
 
   def set_guid
-    if @grant.type_tag == "AGRT"
+    if @grant.type_tag == 'AGRT'
       install_date = Project.find(@grant.project.id).install_date
       @grant.grant_date = adjust_date(install_date)
     end
 
-    @grant.GUID = "#{@grant.type_tag}-#{@grant.project.country}-#{@grant.project.post_code}-#{@grant.project.id}-#{@grant.project.nameplate}-#{@grant.project.claimant_id}-#{@grant.project.install_date.to_formatted_s(:iso8601)}-#{@grant.created_at.strftime('%Y-%m-%d')}"
+    @grant.GUID = "#{@grant.type_tag}-"+
+                  "#{@grant.project.country}-"+
+                  "#{@grant.project.post_code}-"+
+                  "#{@grant.project.id}-"+
+                  "#{@grant.project.nameplate}-"+
+                  "#{@grant.project.claimant_id}-"+
+                  "#{@grant.project.install_date.to_formatted_s(:iso8601)}-"+
+                  "#{@grant.created_at.strftime('%Y-%m-%d')}"
     @grant.save
   end
 
   def set_grant_date
-    if @grant.type_tag == "AGRT"
-      @grant.grant_date = get_adjustment_date(@grant.project.install_date)
+    if @grant.type_tag == 'AGRT'
+      @grant.grant_date = adjust_date(@grant.project.install_date)
     else
       @grant.grant_date = Date.today
     end
   end
 
-  def adjust_date(install_month)
-    calc_month = nil
-    six_months = Date.new
-
-    if install_month.month <= 6
-      calc_month = install_month
-    else
-      calc_month = install_month.advance(:months => 6)
+  # def adjust_date(install_month)
+  #   calc_month = nil
+  #   six_months = Date.new
+  #
+  #   if install_month.month <= 6
+  #     calc_month = install_month
+  #   else
+  #     calc_month = install_month.advance(:months => 6)
+  #   end
+  #
+  #   if Date.today.month >= calc_month.month && Date.today.month <= calc_month.advance(:months => 6).month
+  #     six_months = Date.new(six_months.year, calc_month.month, six_months.day)
+  #   else
+  #     six_months = calc_month.advance(:months => 6)
+  #   end
+  #
+  #   if Date.today.month > 6
+  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
+  #   elsif calc_month.month == six_months.month
+  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
+  #   else
+  #     calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
+  #   end
+  #
+  #   calc_month
+  # end
+  def adjust_date(install_date)
+    if install_date.year < 2010
+      install_date = Date.new(2010,1,1)
     end
 
-    if Date.today.month >= calc_month.month && Date.today.month <= calc_month.advance(:months => 6).month
-      six_months = Date.new(six_months.year, calc_month.month, six_months.day)
-    else
-      six_months = calc_month.advance(:months => 6)
-    end
+    next_anniversary = Date.new(Date.today.year, install_date.month, install_date.day)
+    six_months  = next_anniversary.advance(:months => 6)
 
-    if Date.today.month > 6
-      calc_month = Date.new(Date.today.year, calc_month.month, 1)
-    elsif calc_month.month == six_months.month
-      calc_month = Date.new(Date.today.year, calc_month.month, 1)
+    if Date.today > six_months
+      Date.new(six_months.year, six_months.month, 1)
     else
-      calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
+      Date.new(six_months.year - 1, six_months.month, 1)
+      # Why is isn't there a retreat method!?
     end
-
-    calc_month
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

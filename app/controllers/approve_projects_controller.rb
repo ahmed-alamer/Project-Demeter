@@ -70,14 +70,12 @@ class ApproveProjectsController < ApplicationController
     six_months  = next_anniversary.advance(:months => 6)
 
     if Date.today > six_months
-      calc_month = Date.new(six_months.year, six_months.month, 1)
+      Date.new(six_months.year, six_months.month, 1)
     else
-      calc_month = Date.new(six_months.year - 1, six_months.month, 1)
+      Date.new(six_months.year - 1, six_months.month, 1)
       # Why is isn't there a retreat method!?
     end
-
-    calc_month
-  end
+ end
 
   def calculate_grant_amount(project, grant_date)
     project_install_date = project.install_date

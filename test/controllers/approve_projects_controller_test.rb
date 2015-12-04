@@ -43,10 +43,10 @@ class ApproveProjectsControllerTest < ActionController::TestCase
     puts "Anniversary #{next_anniversary}"
 
     if Date.today > six_months
-      puts "Grant Date is After the Six Months Anniversary"
+      puts 'Grant Date is After the Six Months Anniversary'
       calc_month = Date.new(six_months.year, six_months.month, 1)
     else
-      puts "Grant Date is Before the Six Months Anniversary"
+      puts 'Grant Date is Before the Six Months Anniversary'
       calc_month = Date.new(six_months.year - 1, six_months.month, 1)
       # Why is isn't there a retreat method!?
     end
