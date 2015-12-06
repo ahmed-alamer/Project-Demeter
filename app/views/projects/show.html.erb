@@ -8,7 +8,7 @@
 <br/>
 <div class="panel panel-info">
     <div class="panel-heading">
-      <h3 class="panel-title">Project Details</h3>
+      <h3 class="panel-title">Facility Details</h3>
     </div>
     <div class="panel-body">
       <p>
@@ -17,23 +17,24 @@
       </p>
 
       <p>
-        <strong>Claimant Name:</strong>
-        <%= @project.claimant.first_name + " " + @project.claimant.last_name %>
+        <strong>Legal Entity:</strong>
+        <%= @project.claimant.first_name + ' ' + @project.claimant.last_name %>
       </p>
 
       <p>
-        <strong>Claimant Email:</strong>
+        <strong>Email:</strong>
         <%= @project.claimant.email %>
       </p>
 
-      <p>
-        <strong>Name:</strong>
-        <%= @project.name %>
-      </p>
-
+      <% unless @project.name.nil? %>
+        <p>
+          <strong>Facility Name:</strong>
+          <%= @project.name %>
+        </p>
+      <% end %>
       <p>
         <strong>Nameplate:</strong>
-        <%= number_to_human(@project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %>
+        <%= display_nameplate(@project.nameplate) %>
       </p>
 
       <p>
@@ -53,12 +54,14 @@
 
       <p>
         <strong>Install date:</strong>
-        <%= @project.install_date.strftime("%Y-%m-%d") %>
+        <%= @project.install_date.strftime('%Y-%m-%d') %>
       </p>
 
       <p>
         <strong>Documentation</strong>
-        <%= @project.documentation %>
+
+        <%= link_to truncate(@project.documentation, :length => 50, :omission => '...(Open)'),
+                    @project.documentation, :target => '_blank' %>
       </p>
 
       <%= link_to 'Edit', edit_project_path(@project) %> |

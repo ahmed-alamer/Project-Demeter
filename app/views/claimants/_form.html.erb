@@ -6,7 +6,10 @@
       <%= form_for @claimant, layout: :basic do |f| %>
         <% if @claimant.errors.any? %>
           <div id="error_explanation">
-            <h2><%= pluralize(@claimant.errors.count, "error") %> prohibited this claimant from being saved:</h2>
+            <h2>
+              <%= pluralize(@claimant.errors.count, 'error') %>
+              prohibited this legal entity from being saved
+            </h2>
 
             <ul>
             <% @claimant.errors.full_messages.each do |message| %>
@@ -29,8 +32,8 @@
           <%= f.text_field :country %>
         </div>
         <div class="actions">
-          <%= f.submit %>
-          <%= link_to 'Back', claimants_path, :class => "btn btn-default"%>
+          <%= f.submit 'Save' %>
+          <%= link_to 'Back', claimants_path, :class => 'btn btn-default'%>
         </div>
       <% end %>
     </div>
