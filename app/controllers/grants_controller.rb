@@ -17,7 +17,21 @@ class GrantsController < ApplicationController
     if @view_items == 'BGRT'
       @grants = Bounty.all
     else
-      @grants = Grant.where(:type_tag => @view_items)
+      # this is bullshit, this should be handled by JS in the view. Time to tinker with React!
+      if params[:month]
+        date = DateTime.parse(params[:month])
+        @grants = Grant.where(:type_tag => @view_items)
+                      .where('created_at >= ?',  date)
+                      .where('created_at <= ?', date.end_of_month)
+              .all
+              .group_by { |grant| grant.created_at.beginning_of_month }
+      else
+        @grants = Grant.where(:type_tag => @view_items)
+                      .all
+                      .group_by { |grant| grant.created_at.beginning_of_month }
+      end
+
+      @months = Grant.uniq.pluck(:created_at)
     end
   end
 
@@ -85,7 +99,55 @@ class GrantsController < ApplicationController
     end
   end
 
+  def periodic_grants
+    @grants = generate_periodic_grants(Project.all).compact
+    respond_to do |format|
+      format.html
+      format.csv do
+        @grants.each { |grant| grant.save }
+        file_name = "\"#{Date.today}-periodic-grants\""
+        headers['Content-Disposition'] = "attachment; filename=#{file_name}"
+        # headers['Content-Type'] = 'text/csv'
+      end
+    end
+
+  end
+
   private
+  def generate_periodic_grants(projects)
+    projects.map do |project|
+      grant_date = Date.today
+      six_months = project.install_date.advance(:months => 6)
+      six_months = Date.new(grant_date.year, six_months.month, six_months.day)
+      unless six_months > grant_date
+        grant_date = Time.now
+        grant = Grant.new(:project => project,
+                          :wallet => project.claimant.wallets.first,
+                          :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
+                          :grant_date => grant_date,
+                          :created_at => grant_date,
+                          :updated_at => grant_date,
+                          :type_tag => 'PGRT')
+
+        grant.GUID = generate_guid(grant)
+
+        grant
+
+        # grant.created_at = grant_date
+        # grant.updated_at = grant_date
+        # grant.grant_date = grant_date
+        # grant.project = project
+        # grant.receiver_wallet = project.claimant.wallets.first
+        # puts "claimant = #{project.claimant}"
+        # grant.type_tag = 'PGRT'
+        # grant.GUID = generate_guid(grant)
+        #
+        # grant
+      end
+    end
+
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_grant
     @grant = Grant.find(params[:id])
@@ -116,7 +178,7 @@ class GrantsController < ApplicationController
                   "#{@grant.project.nameplate}-"+
                   "#{@grant.project.claimant_id}-"+
                   "#{@grant.project.install_date.to_formatted_s(:iso8601)}-"+
-                  "#{@grant.created_at.strftime('%Y-%m-%d')}"
+                  "#{@grant.created_at.strftime('%Y-%grant-%d')}"
     @grant.save
   end
 
@@ -128,32 +190,6 @@ class GrantsController < ApplicationController
     end
   end
 
-  # def adjust_date(install_month)
-  #   calc_month = nil
-  #   six_months = Date.new
-  #
-  #   if install_month.month <= 6
-  #     calc_month = install_month
-  #   else
-  #     calc_month = install_month.advance(:months => 6)
-  #   end
-  #
-  #   if Date.today.month >= calc_month.month && Date.today.month <= calc_month.advance(:months => 6).month
-  #     six_months = Date.new(six_months.year, calc_month.month, six_months.day)
-  #   else
-  #     six_months = calc_month.advance(:months => 6)
-  #   end
-  #
-  #   if Date.today.month > 6
-  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
-  #   elsif calc_month.month == six_months.month
-  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
-  #   else
-  #     calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
-  #   end
-  #
-  #   calc_month
-  # end
   def adjust_date(install_date)
     if install_date.year < 2010
       install_date = Date.new(2010,1,1)
@@ -168,6 +204,17 @@ class GrantsController < ApplicationController
       Date.new(six_months.year - 1, six_months.month, 1)
       # Why is isn't there a retreat method!?
     end
+  end
+
+  def generate_guid(grant)
+    "#{grant.type_tag}-"+
+        "#{grant.project.country}-"+
+        "#{grant.project.post_code}-"+
+        "#{grant.project.id}-"+
+        "#{grant.project.nameplate}-"+
+        "#{grant.project.claimant_id}-"+
+        "#{grant.project.install_date.to_formatted_s(:iso8601)}-"+
+        "#{grant.created_at.strftime('%Y-%grant-%d')}"
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

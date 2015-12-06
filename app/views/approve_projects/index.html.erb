@@ -31,7 +31,7 @@
 	  	        <td><%= project.post_code %></td>
 	  	        <td><%= project.country %></td>
 	  	        <td><%= project.install_date %></td>
-	  	        <td><%= project.documentation %></td>
+	  	        <td><%= get_documentation_link(project.documentation) %></td>
 	  	        <td>
 	  	        	<select id="approvalCode<%=project.id%>" class="form-control">
 	  	        		<option value="<%= project.approval_status.code %>">
@@ -45,7 +45,7 @@
 	  	</table>
 	  	<span class="pull-right">
 	  		<button type="button" onclick="submitProjects()" class="btn btn-sm btn-success">Submit</button>
-	  		<%= link_to "Back to Projects", projects_path, :class => "btn btn-sm btn-default" %>
+	  		<%= link_to 'Back to Projects', projects_path, :class => 'btn btn-sm btn-default' %>
 	  	</span>
 	  </div>
 </div>

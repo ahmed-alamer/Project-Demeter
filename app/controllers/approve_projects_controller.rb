@@ -46,6 +46,7 @@ class ApproveProjectsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
+        submit_adjustment_grants
         file_name = "\"#{Date.today}-grants\""
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
         # headers['Content-Type'] = 'text/csv'
@@ -54,11 +55,13 @@ class ApproveProjectsController < ApplicationController
 
   end
 
-  def submit_adjustment_grants
-    #todo: read the values of the request body and create grants and save them
-  end
 
   private
+  def submit_adjustment_grants
+    #todo: read the values of the request body and create grants and save them
+    @adjustment_grants.each { |grant| grant.save }
+  end
+
   def adjust_date(install_date)
     if install_date.year < 2010
       install_date = Date.new(2010,1,1)
