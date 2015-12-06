@@ -24,23 +24,31 @@
           </tr>
         </thead>
 
-        <tbody>
-          <% @grants.each do |grant| %>
+        <% @grants.sort.each do |granting_month, month_grants| %>
+          <tbody>
             <tr>
-              <td>
-                <%= grant.GUID %> 
-                <!-- So it won't hit the database for each non-adjustment grant -->
-                <% if @view_items == "AGRT" %>
-                  <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>" style="color:lime"></span>
-                <% end %>
+              <td colspan="5" class="text-center bg-primary">
+                <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
               </td>
-              <td><%= grant.wallet.public_address %></td>
-              <td><%= solar_coin_amount(grant.amount) %></td>
-              <td><%= link_to 'Show', grant %></td>
-              <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
             </tr>
-          <% end %>
-        </tbody>
+            <% month_grants.each do |grant| %>
+              <tr>
+                <td>
+                  <%= grant.GUID %>
+                  <!-- So it won't hit the database for each non-adjustment grant -->
+                  <% if @view_items == "AGRT" %>
+                    <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>"
+                          style="color:lime"></span>
+                  <% end %>
+                </td>
+                <td><%= grant.wallet.public_address %></td>
+                <td><%= solar_coin_amount(grant.amount) %></td>
+                <td><%= link_to 'Show', grant %></td>
+                <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        <% end %>
       </table>
     </div>
 </div>

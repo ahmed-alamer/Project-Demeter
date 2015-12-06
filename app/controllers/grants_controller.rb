@@ -18,6 +18,8 @@ class GrantsController < ApplicationController
       @grants = Bounty.all
     else
       @grants = Grant.where(:type_tag => @view_items)
+                    .all
+                    .group_by { |grant| grant.created_at.beginning_of_month }
     end
   end
 
@@ -116,7 +118,7 @@ class GrantsController < ApplicationController
                   "#{@grant.project.nameplate}-"+
                   "#{@grant.project.claimant_id}-"+
                   "#{@grant.project.install_date.to_formatted_s(:iso8601)}-"+
-                  "#{@grant.created_at.strftime('%Y-%m-%d')}"
+                  "#{@grant.created_at.strftime('%Y-%grant-%d')}"
     @grant.save
   end
 
@@ -132,24 +134,24 @@ class GrantsController < ApplicationController
   #   calc_month = nil
   #   six_months = Date.new
   #
-  #   if install_month.month <= 6
+  #   if install_month.grant <= 6
   #     calc_month = install_month
   #   else
   #     calc_month = install_month.advance(:months => 6)
   #   end
   #
-  #   if Date.today.month >= calc_month.month && Date.today.month <= calc_month.advance(:months => 6).month
-  #     six_months = Date.new(six_months.year, calc_month.month, six_months.day)
+  #   if Date.today.grant >= calc_month.grant && Date.today.grant <= calc_month.advance(:months => 6).grant
+  #     six_months = Date.new(six_months.year, calc_month.grant, six_months.day)
   #   else
   #     six_months = calc_month.advance(:months => 6)
   #   end
   #
-  #   if Date.today.month > 6
-  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
-  #   elsif calc_month.month == six_months.month
-  #     calc_month = Date.new(Date.today.year, calc_month.month, 1)
+  #   if Date.today.grant > 6
+  #     calc_month = Date.new(Date.today.year, calc_month.grant, 1)
+  #   elsif calc_month.grant == six_months.grant
+  #     calc_month = Date.new(Date.today.year, calc_month.grant, 1)
   #   else
-  #     calc_month = Date.new(Date.today.year -1, calc_month.month, 1)
+  #     calc_month = Date.new(Date.today.year -1, calc_month.grant, 1)
   #   end
   #
   #   calc_month
