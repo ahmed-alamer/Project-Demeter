@@ -7,16 +7,16 @@
 <% end %>
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Projects</div>
+  <div class="panel-heading">Facilities</div>
     <div class="panel-body">
       <span class="btn-group pull-left" role="group" aria-label="...">
-        <%= get_button_link "Pending Projects", "P" %>
-        <%= get_button_link "Approved Projects", "A" %>
-        <%= get_button_link "Rejected Projects", "R" %>
+        <%= get_button_link 'Pending Facilities', 'P' %>
+        <%= get_button_link 'Approved Facilities', 'A' %>
+        <%= get_button_link 'Rejected Facilities', 'R' %>
       </span>
       <span class="pull-right">
-        <%= link_to 'New Project', new_project_path, :class => "btn btn-primary" %>
-        <%= link_to "Approve Projects", approve_projects_path, :class => "btn btn-success" %>
+        <%= link_to 'New Facility', new_project_path, :class => 'btn btn-primary' %>
+        <%= link_to 'Approve Facilities', approve_projects_path, :class => 'btn btn-success' %>
       </span>
       <br/>
       <hr/>
@@ -42,9 +42,11 @@
               <td><%= project.id %></td>
               <td><%= project.claimant.email %></td>
               <td><%= project.claimant_id %></td>
-              <td><%= project.status == "P" ? "Pending" : project.status %></td>
+              <td><%= project.status == 'P' ? 'Pending' : project.status %></td>
               <td><%= project.name %></td>
-              <td><%= number_to_human(project.nameplate, units: {unit: "kWh", hundred: "mWh", thousand: "gWh"}) %></td>
+              <td>
+                <%= display_nameplate(project.nameplate) %>
+              </td>
               <td><%= project.address %></td>
               <td><%= project.post_code %></td>
               <td><%= project.country %></td>

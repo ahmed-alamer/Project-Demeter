@@ -46,6 +46,7 @@ class ApproveProjectsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
+        submit_adjustment_grants
         file_name = "\"#{Date.today}-grants\""
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
         # headers['Content-Type'] = 'text/csv'
@@ -54,11 +55,13 @@ class ApproveProjectsController < ApplicationController
 
   end
 
-  def submit_adjustment_grants
-    #todo: read the values of the request body and create grants and save them
-  end
 
   private
+  def submit_adjustment_grants
+    #todo: read the values of the request body and create grants and save them
+    @adjustment_grants.each { |grant| grant.save }
+  end
+
   def adjust_date(install_date)
     if install_date.year < 2010
       install_date = Date.new(2010,1,1)
@@ -70,14 +73,12 @@ class ApproveProjectsController < ApplicationController
     six_months  = next_anniversary.advance(:months => 6)
 
     if Date.today > six_months
-      calc_month = Date.new(six_months.year, six_months.month, 1)
+      Date.new(six_months.year, six_months.month, 1)
     else
-      calc_month = Date.new(six_months.year - 1, six_months.month, 1)
+      Date.new(six_months.year - 1, six_months.month, 1)
       # Why is isn't there a retreat method!?
     end
-
-    calc_month
-  end
+ end
 
   def calculate_grant_amount(project, grant_date)
     project_install_date = project.install_date
