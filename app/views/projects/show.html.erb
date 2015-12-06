@@ -60,8 +60,7 @@
       <p>
         <strong>Documentation</strong>
 
-        <%= link_to truncate(@project.documentation, :length => 50, :omission => '...(Open)'),
-                    @project.documentation, :target => '_blank' %>
+        <%= get_documentation_link(@project.documentation) %>
       </p>
 
       <%= link_to 'Edit', edit_project_path(@project) %> |

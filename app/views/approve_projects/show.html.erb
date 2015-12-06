@@ -4,29 +4,38 @@
   </div>
   <div class="panel-body">
     <div class="pull-right">
-      <%= link_to 'Download CSV list', approve_project_path(format: :csv), :class => 'btn btn-success' %>
+      <button id="executeButton" class="btn btn-success">Save & Download List</button>
+      <%= link_to 'Back to Facilities',
+                  projects_path(:status => 'A'),
+                  :class => 'btn btn-default' %>
     </div>
   </div>
   <table class="table table-hover">
-	   	<thead>
-	   		<tr>
-          <th>Project</th>
-          <th>Amount</th>
-          <th>Receiver Wallet</th>
-          <th>Receiver Email</th>
-          <th>Type</th>
-	   		</tr>
-	   	</thead>
-	   	<tbody>
-	   		<% @adjustment_grants.each do |grant| %>
-		   		<tr>
-		   			<td><%= grant.project.id %></td>
-		   			<td><%= solar_coin_amount(grant.amount) %></td>
-		   			<td><%= grant.wallet.public_address %></td>
-            <td><%=	grant.wallet.claimant.email  %></td>
-		   			<td><%= grant.type_tag %></td> <!-- obviously! -->
-		   		</tr>
-	   		<% end %>
-	   	</tbody>
-	   </table>
+    <thead>
+    <tr>
+      <th>Project</th>
+      <th>Amount</th>
+      <th>Receiver Wallet</th>
+      <th>Receiver Email</th>
+      <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% @adjustment_grants.each do |grant| %>
+          <tr>
+            <td><%= grant.project.id %></td>
+            <td><%= solar_coin_amount(grant.amount) %></td>
+            <td><%= grant.wallet.public_address %></td>
+            <td><%= grant.wallet.claimant.email %></td>
+            <td><%= grant.type_tag %></td> <!-- obviously! -->
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
+<script type="text/javascript" charset="utf-8">
+  $('#executeButton').click(function() {
+    $(this).prop('disabled', true);
+    window.location = '<%= approve_project_path format: :csv %>';
+  });
+</script>

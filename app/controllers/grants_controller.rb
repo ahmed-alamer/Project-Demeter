@@ -20,7 +20,9 @@ class GrantsController < ApplicationController
       # this is bullshit, this should be handled by JS in the view. Time to tinker with React!
       if params[:month]
         date = DateTime.parse(params[:month])
-        @grants = Grant.where(:type_tag => @view_items, :created_at =>  date)
+        @grants = Grant.where(:type_tag => @view_items)
+                      .where('created_at >= ?',  date)
+                      .where('created_at <= ?', date.end_of_month)
               .all
               .group_by { |grant| grant.created_at.beginning_of_month }
       else
