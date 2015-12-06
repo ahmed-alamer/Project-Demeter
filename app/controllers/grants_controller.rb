@@ -17,9 +17,19 @@ class GrantsController < ApplicationController
     if @view_items == 'BGRT'
       @grants = Bounty.all
     else
-      @grants = Grant.where(:type_tag => @view_items)
-                    .all
-                    .group_by { |grant| grant.created_at.beginning_of_month }
+      # this is bullshit, this should be handled by JS in the view. Time to tinker with React!
+      if params[:month]
+        date = DateTime.parse(params[:month])
+        @grants = Grant.where(:type_tag => @view_items, :created_at =>  date)
+              .all
+              .group_by { |grant| grant.created_at.beginning_of_month }
+      else
+        @grants = Grant.where(:type_tag => @view_items)
+                      .all
+                      .group_by { |grant| grant.created_at.beginning_of_month }
+      end
+
+      @months = Grant.uniq.pluck(:created_at)
     end
   end
 
@@ -87,6 +97,10 @@ class GrantsController < ApplicationController
     end
   end
 
+  def periodic_grants
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_grant
@@ -130,32 +144,6 @@ class GrantsController < ApplicationController
     end
   end
 
-  # def adjust_date(install_month)
-  #   calc_month = nil
-  #   six_months = Date.new
-  #
-  #   if install_month.grant <= 6
-  #     calc_month = install_month
-  #   else
-  #     calc_month = install_month.advance(:months => 6)
-  #   end
-  #
-  #   if Date.today.grant >= calc_month.grant && Date.today.grant <= calc_month.advance(:months => 6).grant
-  #     six_months = Date.new(six_months.year, calc_month.grant, six_months.day)
-  #   else
-  #     six_months = calc_month.advance(:months => 6)
-  #   end
-  #
-  #   if Date.today.grant > 6
-  #     calc_month = Date.new(Date.today.year, calc_month.grant, 1)
-  #   elsif calc_month.grant == six_months.grant
-  #     calc_month = Date.new(Date.today.year, calc_month.grant, 1)
-  #   else
-  #     calc_month = Date.new(Date.today.year -1, calc_month.grant, 1)
-  #   end
-  #
-  #   calc_month
-  # end
   def adjust_date(install_date)
     if install_date.year < 2010
       install_date = Date.new(2010,1,1)

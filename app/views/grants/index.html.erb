@@ -10,8 +10,22 @@
   <!-- Default panel contents -->
   <div class="panel-heading"> <%= get_panel_title(@view_items) %> Grants</div>
     <div class="panel-body">
+      <span class="pull-left">
+        <strong>Month</strong>
+        <label>
+          <select id="monthSelector" class="form-control">
+            <% @months.each do |granting_month| %>
+                <option name="<%=granting_month%>">
+                  <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
+                </option>
+                <% end %>
+          </select>
+        </label>
+        <%= link_to 'Reset', grants_path %>
+      </span>
       <span class="pull-right">
-        <%= link_to 'New Grant', new_grant_path, :class => "btn btn-primary" %>
+        <%= link_to 'New Grant', new_grant_path, :class => 'btn btn-primary' %>
+        <%= link_to 'Execute Periodic Grants', {:action => 'periodic_grants'}, :class => 'btn btn-info'%>
       </span>
       <br/>
       <table class="table table-hover">
@@ -27,7 +41,7 @@
         <% @grants.sort.each do |granting_month, month_grants| %>
           <tbody>
             <tr>
-              <td colspan="5" class="text-center bg-primary">
+              <td colspan="5" class="text-center bg-success">
                 <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
               </td>
             </tr>
@@ -36,7 +50,7 @@
                 <td>
                   <%= grant.GUID %>
                   <!-- So it won't hit the database for each non-adjustment grant -->
-                  <% if @view_items == "AGRT" %>
+                  <% if @view_items == 'AGRT' %>
                     <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>"
                           style="color:lime"></span>
                   <% end %>
@@ -52,3 +66,13 @@
       </table>
     </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+  $("#monthSelector").change(function() {
+    var date = $(this).val().split("-");
+    var month = date[0].trim();
+    var year = date[1].trim();
+
+    window.location = "/grants?month=" + month + " 1, " + year;
+  });
+</script>
