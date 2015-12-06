@@ -1,6 +1,6 @@
 module ApplicationHelper
 	def solar_coin_amount(amount)
-		number_with_delimiter(amount, separator: '.', delimiter: ',') + ' SLR'
+		"#{number_with_delimiter(amount, separator: '.', delimiter: ',')} SLR"
 	end
 
 	def get_documentation_link(documentation_link)
