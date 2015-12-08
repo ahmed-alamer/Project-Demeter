@@ -11,9 +11,8 @@
       <thead>
         <tr>
           <th>Public address</th>
-          <th>Tag</th>
-          <th>Owner</th>
-          <th colspan="2"></th>
+          <th>Generator ID</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -21,8 +20,7 @@
         <% @wallets.each do |wallet| %>
           <tr>
             <td><%= wallet.public_address %></td>
-            <td><%= wallet.tag %></td>
-            <td><%= wallet.claimant_id %></td>
+            <td><%= wallet.project.id %></td>
             <td><%= link_to 'Show', wallet %></td>
           </tr>
         <% end %>

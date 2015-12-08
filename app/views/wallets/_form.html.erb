@@ -7,11 +7,8 @@
         <div class="field">
           <%= f.text_field :public_address %>
         </div>
-        <div class="field">
-          <%= f.text_field :tag %>
-        </div>
         <div id="bloodhound">
-          <%= f.text_field :claimant_id %>
+          <%= f.text_field :project_id %>
         </div>
         <div class="actions">
           <%= f.submit %>
@@ -20,7 +17,3 @@
       <% end %>
     </div>
 </div>
-
-<script type="text/javascript">
-  bindTypeaheadFullName("wallet_claimant_id", "claimants");
-</script>

@@ -27,7 +27,6 @@
             <th>Cliamant Email</th>
             <th>Claimant ID</th>
             <th>Status</th>
-            <th>Name</th>
             <th>Nameplate</th>
             <th>Address</th>
             <th>Post code</th>
@@ -43,10 +42,7 @@
               <td><%= project.claimant.email %></td>
               <td><%= project.claimant_id %></td>
               <td><%= project.status == 'P' ? 'Pending' : project.status %></td>
-              <td><%= project.name %></td>
-              <td>
-                <%= display_nameplate(project.nameplate) %>
-              </td>
+              <td><%= display_nameplate(project.nameplate) %></td>
               <td><%= project.address %></td>
               <td><%= project.post_code %></td>
               <td><%= project.country %></td>
