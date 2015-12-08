@@ -26,12 +26,6 @@
         <%= @project.claimant.email %>
       </p>
 
-      <% unless @project.name.nil? %>
-        <p>
-          <strong>Facility Name:</strong>
-          <%= @project.name %>
-        </p>
-      <% end %>
       <p>
         <strong>Nameplate:</strong>
         <%= display_nameplate(@project.nameplate) %>

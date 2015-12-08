@@ -17,13 +17,8 @@
 	</p>
 
 	<p>
-	  <strong>Tag:</strong>
-	  <%= @wallet.tag %>
-	</p>
-
-	<p>
-	  <strong>Owner:</strong>
-	  <%= @wallet.claimant.first_name + " " + @wallet.claimant.last_name %>
+	  <strong>Project:</strong>
+	  <%= @wallet.project.id %>
 	</p>
 
 	<%= link_to 'Edit', edit_wallet_path(@wallet) %> |
