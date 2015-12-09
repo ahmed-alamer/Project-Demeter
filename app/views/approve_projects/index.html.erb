@@ -1,3 +1,11 @@
+<% if @projects.empty? %>
+    <div class="container">
+      <div class="alert alert-warning text-center" role="alert">
+        <strong>Oops!</strong>
+        Looks like someone isn't working hard enough to get more people registered!
+      </div>
+    </div>
+<% end %>
 <div class="panel panel-default">
 	  <div class="panel-heading">
 			<h3 class="panel-title">Pending Projects</h3>
@@ -8,7 +16,6 @@
 	  	    <tr>
 	  	    	<th>Generator ID</th>
 	  	      <th>Claimant</th>
-	  	      <th>Name</th>
 	  	      <th>Nameplate</th>
 	  	      <th>Address</th>
 	  	      <th>Post code</th>
@@ -19,13 +26,11 @@
 	  	      <th></th>
 	  	    </tr>
 	  	  </thead>
-
 	  	  <tbody id="projects">
 	  	    <% @projects.each do |project| %>
 	  	      <tr>
 	  	      	<td name="id"><%= project.id %></td>
 	  	        <td><%= project.claimant.email %></td>
-	  	        <td><%= project.name %></td>
 	  	        <td><%= project.nameplate %></td>
 	  	        <td><%= project.address %></td>
 	  	        <td><%= project.post_code %></td>
@@ -43,9 +48,15 @@
 	  	    <% end %>
 	  	  </tbody>
 	  	</table>
-	  	<span class="pull-right">
-	  		<button type="button" onclick="submitProjects()" class="btn btn-sm btn-success">Submit</button>
-	  		<%= link_to 'Back to Projects', projects_path, :class => 'btn btn-sm btn-default' %>
+
+      <span class="pull-right">
+	  		<button type="button"
+                disabled = "<% not @projects.empty? %>"
+                onclick="submitProjects()"
+                class="btn btn-sm btn-success">
+          Submit
+        </button>
+	  		<%= link_to 'Cancel', projects_path, :class => 'btn btn-sm btn-default' %>
 	  	</span>
 	  </div>
 </div>

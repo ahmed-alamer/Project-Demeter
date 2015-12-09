@@ -8,31 +8,22 @@ class GrantsController < ApplicationController
   # GET /grants.json
   def index
     # So whoever reads this code, please, if you know a better way to do this pull it!
-    @view_items = if params[:view]
-                    params[:view]
-                  else
-                    'AGRT'
-                  end
+    @view_items = params[:view] ? params[:view] : 'AGRT'
 
-    if @view_items == 'BGRT'
-      @grants = Bounty.all
+    if params[:month]
+      date = DateTime.parse(params[:month])
+      @grants = Grant.where(:type_tag => @view_items)
+                    .where('created_at >= ?',  date)
+                    .where('created_at <= ?', date.end_of_month)
+                    .all
+                    .group_by { |grant| grant.created_at.beginning_of_month }
     else
-      # this is bullshit, this should be handled by JS in the view. Time to tinker with React!
-      if params[:month]
-        date = DateTime.parse(params[:month])
-        @grants = Grant.where(:type_tag => @view_items)
-                      .where('created_at >= ?',  date)
-                      .where('created_at <= ?', date.end_of_month)
-              .all
-              .group_by { |grant| grant.created_at.beginning_of_month }
-      else
-        @grants = Grant.where(:type_tag => @view_items)
-                      .all
-                      .group_by { |grant| grant.created_at.beginning_of_month }
-      end
-
-      @months = Grant.uniq.pluck(:created_at)
+      @grants = Grant.where(:type_tag => @view_items)
+                    .all
+                    .group_by { |grant| grant.created_at.beginning_of_month }
     end
+
+    @months = Grant.uniq.pluck(:created_at)
   end
 
   # GET /grants/1
@@ -122,7 +113,7 @@ class GrantsController < ApplicationController
       unless six_months > grant_date
         grant_date = Time.now
         grant = Grant.new(:project => project,
-                          :wallet => project.claimant.wallets.first,
+                          :receiver_wallet => project.wallet_address,
                           :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
                           :grant_date => grant_date,
                           :created_at => grant_date,

@@ -47,15 +47,8 @@
             </tr>
             <% month_grants.each do |grant| %>
               <tr>
-                <td>
-                  <%= grant.GUID %>
-                  <!-- So it won't hit the database for each non-adjustment grant -->
-                  <% if @view_items == 'AGRT' %>
-                    <span class="<%= grant.bounties.size != 0 ? 'glyphicon glyphicon-asterisk' : ''%>"
-                          style="color:lime"></span>
-                  <% end %>
-                </td>
-                <td><%= grant.wallet.public_address %></td>
+                <td><%= grant.GUID %></td>
+                <td><%= grant.project.wallet_address %></td>
                 <td><%= solar_coin_amount(grant.amount) %></td>
                 <td><%= link_to 'Show', grant %></td>
                 <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
