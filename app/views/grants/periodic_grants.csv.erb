@@ -1,3 +1,3 @@
 <% @grants.each do |grant| %>
-    <%= grant.wallet.public_address %> <%= '   ' %> <%= grant.amount %>
+    <%= grant.receiver_wallet  %> <%= '   ' %> <%= grant.amount %>
 <% end %>
