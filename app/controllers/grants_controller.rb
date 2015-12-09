@@ -113,7 +113,7 @@ class GrantsController < ApplicationController
       unless six_months > grant_date
         grant_date = Time.now
         grant = Grant.new(:project => project,
-                          :receiver_wallet => project.inspect,
+                          :receiver_wallet => project.wallet_address,
                           :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
                           :grant_date => grant_date,
                           :created_at => grant_date,
