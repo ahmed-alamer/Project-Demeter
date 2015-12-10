@@ -21,22 +21,21 @@
     </tr>
     </thead>
     <tbody>
-    <% @grants.each do |grant| %>
-        <tr>
-          <td><%= grant.project.id %></td>
-          <td><%= solar_coin_amount(grant.amount) %></td>
-          <td><%= grant.project.wallet_address %></td>
-          <td><%= grant.project.claimant.email %></td>
-          <td><%= grant.type_tag %></td> <!-- obviously! -->
-        </tr>
-    <% end %>
+      <% @adjustment_grants.each do |grant| %>
+          <tr>
+            <td><%= grant.project.id %></td>
+            <td><%= solar_coin_amount(grant.amount) %></td>
+            <td><%= grant.wallet.public_address %></td>
+            <td><%= grant.wallet.claimant.email %></td>
+            <td><%= grant.type_tag %></td> <!-- obviously! -->
+          </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
 <script type="text/javascript" charset="utf-8">
-  console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
   $('#executeButton').click(function() {
     $(this).prop('disabled', true);
-    window.location = '<%= url_for :action => 'periodic_grants', :format => :csv %>';
+    window.location = '<%= execute_adjustment_path format: :csv %>';
   });
 </script>
