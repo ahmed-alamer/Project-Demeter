@@ -36,6 +36,6 @@
 <script type="text/javascript" charset="utf-8">
   $('#executeButton').click(function() {
     $(this).prop('disabled', true);
-    window.location = '<%= execute_adjustment_path format: :csv %>';
+    window.location = '<%= adjustment_grants_path format: :csv %>';
   });
 </script>

@@ -2,8 +2,6 @@ require 'csv'
 
 class GrantingEngineController < ApplicationController
 
-  #Adjustment
-
   def approve_projects
     @projects = Project.where(:status => 'P')
   end
@@ -33,10 +31,9 @@ class GrantingEngineController < ApplicationController
                             .where('updated_at >= ?', Date.today)
 
     @adjustment_grants = generate_adjustment_grants(approved_projects)
-  end
 
-  def execute_adjustment_grants
     respond_to do |format|
+      format.html
       format.csv do
         @adjustment_grants.each { |grant| grant.save }
         file_name = "\"#{Date.today}-grants\""
@@ -46,14 +43,11 @@ class GrantingEngineController < ApplicationController
     end
   end
 
-  #Periodic
-
   def periodic_grants
     @grants = generate_periodic_grants(Project.all).compact
-  end
 
-  def execute_periodic_grants
     respond_to do |format|
+      format.html
       format.csv do
         @grants.each { |grant| grant.save }
         file_name = "\"#{Date.today}-periodic-grants\""
