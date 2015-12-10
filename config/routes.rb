@@ -6,16 +6,13 @@ Rails.application.routes.draw do
   resources :projects
   resources :claimants
 
-  #this is neat! Love Rails!
-  resources :granting_engine do
-    get 'approve_projects', to: :approve_projects, as: 'approve_projects'
+  # Granting Engine Routes
+  get 'approve_projects', to: 'granting_engine#approve_projects', as: 'approve_projects'
+  get 'adjustment_grants', to: 'granting_engine#adjustment_grants'
+  get 'periodic_grants', to: 'granting_engine#periodic_grants'
 
-    get 'adjustment_grants', to: :adjustment_grants
-    get 'periodic_grants', to: :periodic_grants
-
-    post 'adjustment_grants/execute_', to: :execute_adjustment_grants, as: 'execute_adjustment'
-    post 'periodic_grants/execute', to: :execute_periodic_grants, as: 'execute_periodic'
-  end
+  post 'adjustment_grants/execute', to: 'granting_engine#execute_adjustment_grants'
+  post 'periodic_grants/execute', to: 'granting_engine#execute_periodic_grants'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

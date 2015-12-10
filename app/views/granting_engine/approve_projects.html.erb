@@ -1,41 +1,122 @@
-<div class="panel panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">AGRT GRANTS</h3>
-  </div>
-  <div class="panel-body">
-    <div class="pull-right">
-      <button id="executeButton" class="btn btn-success">Save & Download List</button>
-      <%= link_to 'Back to Facilities',
-                  projects_path(:status => 'A'),
-                  :class => 'btn btn-default' %>
+<% if @projects.empty? %>
+    <div class="container">
+      <div class="alert alert-warning text-center" role="alert">
+        <strong>Oops!</strong>
+        Looks like someone isn't working hard enough to get more people registered!
+      </div>
     </div>
-  </div>
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th>Project</th>
-      <th>Amount</th>
-      <th>Receiver Wallet</th>
-      <th>Receiver Email</th>
-      <th>Type</th>
-    </tr>
-    </thead>
-    <tbody>
-      <% @adjustment_grants.each do |grant| %>
-          <tr>
-            <td><%= grant.project.id %></td>
-            <td><%= solar_coin_amount(grant.amount) %></td>
-            <td><%= grant.wallet.public_address %></td>
-            <td><%= grant.wallet.claimant.email %></td>
-            <td><%= grant.type_tag %></td> <!-- obviously! -->
-          </tr>
-      <% end %>
-    </tbody>
-  </table>
+<% end %>
+<div class="panel panel-default">
+	  <div class="panel-heading">
+			<h3 class="panel-title">Pending Projects</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<table class="table table-hover table-responsive">
+	  	  <thead>
+	  	    <tr>
+	  	    	<th>Generator ID</th>
+	  	      <th>Claimant</th>
+	  	      <th>Nameplate</th>
+	  	      <th>Address</th>
+	  	      <th>Post code</th>
+	  	      <th>Country</th>
+	  	      <th>Install date</th>
+	  	      <th>Documentation</th>
+	  	      <th>Status</th>
+	  	      <th></th>
+	  	    </tr>
+	  	  </thead>
+	  	  <tbody id="projects">
+	  	    <% @projects.each do |project| %>
+	  	      <tr>
+	  	      	<td name="id"><%= project.id %></td>
+	  	        <td><%= project.claimant.email %></td>
+	  	        <td><%= project.nameplate %></td>
+	  	        <td><%= project.address %></td>
+	  	        <td><%= project.post_code %></td>
+	  	        <td><%= project.country %></td>
+	  	        <td><%= project.install_date %></td>
+	  	        <td><%= get_documentation_link(project.documentation) %></td>
+	  	        <td>
+	  	        	<select id="approvalCode<%=project.id%>" class="form-control">
+	  	        		<option value="<%= project.approval_status.code %>">
+	  	        			<%= project.approval_status.details %>
+	  	        		</option>
+	  	        	</select>
+	  	        </td>
+	  	      </tr>
+	  	    <% end %>
+	  	  </tbody>
+	  	</table>
+
+      <span class="pull-right">
+	  		<button type="button"
+                disabled = "<% not @projects.empty? %>"
+                onclick="submitProjects()"
+                class="btn btn-sm btn-success">
+          Submit
+        </button>
+	  		<%= link_to 'Cancel', projects_path, :class => 'btn btn-sm btn-default' %>
+	  	</span>
+	  </div>
 </div>
-<script type="text/javascript" charset="utf-8">
-  $('#executeButton').click(function() {
-    $(this).prop('disabled', true);
-    window.location = '<%= execute_adjustment_path format: :csv %>';
-  });
+<script type="text/javascript">
+	
+	var approvalCodes = [];
+
+	function fillApprovalCodes(approvalSelectMenu) {
+		approvalCodes.forEach(function (code) {
+			if(approvalSelectMenu.find("option[value="+code.id+"]").val() == undefined) {
+				$(approvalSelectMenu).append("<option value='" + code.id + "'>" + code.details + "</option>");							
+			}
+		});
+	}
+
+	function submitProjects () {
+		var approvedProjects = [];
+
+		$("#projects").children().each(function(){
+			var projectId = $(this).find("td[name=id]").html();
+			var projectStatus = $(this).find("select").val();
+			if(projectStatus != "Pending") {
+				approvedProjects.push({"project_id" : projectId, "project_status" : projectStatus});
+			}
+		});
+
+		console.log(approvedProjects);
+
+		$.ajax({
+			url: "/granting_engine",
+			method: "post",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify({"approved_projects": approvedProjects}),
+			success: function(result) {
+				console.log(result);
+				window.location = "/granting_engine/queue";
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	}
+
+	$.ajax({
+		url: "/approval_statuses.json",
+		method: "get",
+		success: function (data) {
+			data.forEach(function(item) {
+				approvalCodes.push(item);
+			});
+
+			$("#projects").children().each(function(index, project) {
+				fillApprovalCodes($(project).find("select"))
+			});
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+
+
 </script>
