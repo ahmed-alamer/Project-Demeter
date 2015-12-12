@@ -25,8 +25,8 @@
           <tr>
             <td><%= grant.project.id %></td>
             <td><%= solar_coin_amount(grant.amount) %></td>
-            <td><%= grant.wallet.public_address %></td>
-            <td><%= grant.wallet.claimant.email %></td>
+            <td><%= grant.receiver_wallet %></td>
+            <td><%= grant.project.claimant.email %></td>
             <td><%= grant.type_tag %></td> <!-- obviously! -->
           </tr>
       <% end %>

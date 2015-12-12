@@ -13,62 +13,62 @@
 
 ActiveRecord::Schema.define(version: 20151212185018) do
 
-  create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
-    t.string   "details",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+  create_table 'approval_statuses', primary_key: 'code', force: :cascade do |t|
+    t.string 'details', limit: 255
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  create_table "bounties", force: :cascade do |t|
-    t.string   "GUID",            limit: 255
-    t.decimal  "amount",                      precision: 10, scale: 6
-    t.string   "receiver_wallet", limit: 255
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.integer  "project_id",      limit: 4
+  create_table 'bounties', force: :cascade do |t|
+    t.string 'GUID', limit: 255
+    t.decimal 'amount', precision: 10, scale: 6
+    t.string 'receiver_wallet', limit: 255
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.integer 'project_id', limit: 4
   end
 
-  create_table "claimants", force: :cascade do |t|
-    t.string   "first_name", limit: 255
-    t.string   "email",      limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "last_name",  limit: 255
+  create_table 'claimants', force: :cascade do |t|
+    t.string 'first_name', limit: 255
+    t.string 'email', limit: 255
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'last_name', limit: 255
   end
 
-  create_table "grants", force: :cascade do |t|
-    t.decimal  "amount",                      precision: 50, scale: 10
-    t.integer  "project_id",      limit: 4
-    t.string   "receiver_wallet", limit: 255
-    t.datetime "created_at",                                                             null: false
-    t.datetime "updated_at",                                                             null: false
-    t.string   "type_tag",        limit: 255,                           default: "PGRT"
-    t.string   "GUID",            limit: 255
-    t.date     "grant_date"
+  create_table 'grants', force: :cascade do |t|
+    t.decimal 'amount', precision: 50, scale: 10
+    t.integer 'project_id', limit: 4
+    t.string 'receiver_wallet', limit: 255
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'type_tag', limit: 255, default: 'PGRT'
+    t.string 'GUID', limit: 255
+    t.date 'grant_date'
   end
 
-  create_table "projects", force: :cascade do |t|
-    t.decimal  "nameplate",                  precision: 10, scale: 6
-    t.string   "address",        limit: 255
-    t.string   "post_code",      limit: 255
-    t.string   "country",        limit: 255
-    t.date     "install_date"
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
-    t.integer  "claimant_id",    limit: 4
-    t.string   "status",         limit: 255,                          default: "P"
-    t.string   "documentation",  limit: 255
-    t.string   "city",           limit: 255
-    t.string   "state",          limit: 255
-    t.string   "wallet_address", limit: 255
-    t.boolean  "adjusted",       limit: 1,                            default: false
+  create_table 'projects', force: :cascade do |t|
+    t.decimal 'nameplate', precision: 10, scale: 6
+    t.string 'address', limit: 255
+    t.string 'post_code', limit: 255
+    t.string 'country', limit: 255
+    t.date 'install_date'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.integer 'claimant_id', limit: 4
+    t.string 'status', limit: 255, default: 'P'
+    t.string 'documentation', limit: 255
+    t.string 'city', limit: 255
+    t.string 'state', limit: 255
+    t.string 'wallet_address', limit: 255
+    t.boolean 'adjusted', limit: 1, default: false
   end
 
-  create_table "wallets", force: :cascade do |t|
-    t.string   "public_address", limit: 255
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "project_id",     limit: 4
+  create_table 'wallets', force: :cascade do |t|
+    t.string 'public_address', limit: 255
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.integer 'project_id', limit: 4
   end
 
 end

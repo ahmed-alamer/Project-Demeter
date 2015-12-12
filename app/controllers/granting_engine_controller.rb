@@ -64,7 +64,7 @@ class GrantingEngineController < ApplicationController
                 :receiver_wallet => project.wallet_address,
                 :type_tag => 'AGRT',
                 :grant_date => adjust_date(project.install_date),
-                :amount => calculate_grant_amount(project, grant.grant_date))
+                :amount => calculate_adjustment_amount(project, Date.today))
     end
   end
 
@@ -111,7 +111,7 @@ class GrantingEngineController < ApplicationController
     end
   end
 
-  def calculate_grant_amount(project, grant_date)
+  def calculate_adjustment_amount(project, grant_date)
     project_install_date = project.install_date
 
     if project_install_date.year < 2010
