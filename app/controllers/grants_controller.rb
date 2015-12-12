@@ -76,17 +76,6 @@ class GrantsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_grant
-    @grant = Grant.find(params[:id])
-    @grant.project_id = @grant.project.name
-  end
-
-  def get_project
-    project = Project.where(:name => grant_params[:project_id]).take
-    params[:grant][:project_id] = project.id
-  end
-
   def prepare_view
     @months = Array.new
     date_iterator = Date.new(2013, 1, 1)
@@ -105,6 +94,17 @@ class GrantsController < ApplicationController
         .where('created_at <= ?', filter_date.end_of_month)
         .where(:type_tag => params[:grant_type])
   end
+
+  def set_grant
+    @grant = Grant.find(params[:id])
+    @grant.project_id = @grant.project.name
+  end
+
+  def get_project
+    project = Project.where(:name => grant_params[:project_id]).take
+    params[:grant][:project_id] = project.id
+  end
+
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def grant_params

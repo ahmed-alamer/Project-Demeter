@@ -34,7 +34,7 @@ class GrantingEngineController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        @adjustment_grants.each { |grant| grant.save }
+        # @adjustment_grants.each { |grant| grant.save }
         file_name = "\"#{Date.today}-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
@@ -94,7 +94,7 @@ class GrantingEngineController < ApplicationController
         project.nameplate,
         project.claimant_id,
         project.install_date.to_formatted_s(:iso8601),
-        DateTime.now.strftime('%Y-%grant-%d')
+        DateTime.now.strftime('%Y-%m-%d')
     ].join('-')
   end
 
