@@ -27,8 +27,7 @@ class GrantingEngineController < ApplicationController
   end
 
   def adjustment_grants
-    approved_projects = Project.where(:status => 'A1')
-                            .where('updated_at >= ?', Date.today)
+    approved_projects = Project.where(:adjusted => false)
 
     @adjustment_grants = generate_adjustment_grants(approved_projects)
 
@@ -60,7 +59,8 @@ class GrantingEngineController < ApplicationController
   private
   def generate_adjustment_grants(approved_projects)
     approved_projects.map do |project|
-      Grant.new(:project => project,
+      Grant.new(:GUID => generate_guid('AGRT', project),
+                :project => project,
                 :receiver_wallet => project.wallet_address,
                 :type_tag => 'AGRT',
                 :grant_date => adjust_date(project.install_date),
