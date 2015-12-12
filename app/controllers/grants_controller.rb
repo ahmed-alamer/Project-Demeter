@@ -1,29 +1,14 @@
 class GrantsController < ApplicationController
   before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :get_project, only: [:create, :update]
-  before_action :set_receiver_wallet, only: [:create, :update]
-  after_action :set_guid, only: [:create, :update]
 
   # GET /grants
   # GET /grants.json
   def index
-    # So whoever reads this code, please, if you know a better way to do this pull it!
-    @view_items = params[:view] ? params[:view] : 'AGRT'
-
-    if params[:month]
-      date = DateTime.parse(params[:month])
-      @grants = Grant.where(:type_tag => @view_items)
-                    .where('created_at >= ?',  date)
-                    .where('created_at <= ?', date.end_of_month)
-                    .all
-                    .group_by { |grant| grant.created_at.beginning_of_month }
-    else
-      @grants = Grant.where(:type_tag => @view_items)
-                    .all
-                    .group_by { |grant| grant.created_at.beginning_of_month }
+    respond_to do |format|
+      format.html { prepare_view }
+      format.json { render :json => read_grants_data.to_json }
     end
-
-    @months = Grant.uniq.pluck(:created_at)
   end
 
   # GET /grants/1
@@ -102,41 +87,23 @@ class GrantsController < ApplicationController
     params[:grant][:project_id] = project.id
   end
 
-  def set_receiver_wallet
-    grant = params[:grant]
-    wallet = grant_params[:receiver_wallet]
-    grant[:receiver_wallet] = Wallet.where(:tag => wallet).first.id
-  end
+  def prepare_view
+    @months = Array.new
+    date_iterator = Date.new(2013, 1, 1)
+    today = Date.today
 
-  def set_guid
-    if @grant.type_tag == 'AGRT'
-      install_date = Project.find(@grant.project.id).install_date
-      @grant.grant_date = adjust_date(install_date)
+    while date_iterator < today
+      @months << date_iterator
+      date_iterator = date_iterator.advance(:months => 1)
     end
-
-    @grant.GUID = "#{@grant.type_tag}-"+
-                  "#{@grant.project.country}-"+
-                  "#{@grant.project.post_code}-"+
-                  "#{@grant.project.id}-"+
-                  "#{@grant.project.nameplate}-"+
-                  "#{@grant.project.claimant_id}-"+
-                  "#{@grant.project.install_date.to_formatted_s(:iso8601)}-"+
-                  "#{@grant.created_at.strftime('%Y-%grant-%d')}"
-    @grant.save
   end
 
+  def read_grants_data
+    filter_date = DateTime.parse(params[:filter_date])
 
-  def generate_guid(grant)
-    [
-        grant.type_tag,
-        grant.project.country,
-        grant.project.post_code,
-        grant.project.id,
-        grant.project.nameplate,
-        grant.project.claimant_id,
-        grant.project.install_date.to_formatted_s(:iso8601),
-        grant.created_at.strftime('%Y-%grant-%d')
-    ].join('-')
+    Grant.where('created_at >= ?', filter_date)
+        .where('created_at <= ?', filter_date.end_of_month)
+        .where(:type_tag => params[:grant_type])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

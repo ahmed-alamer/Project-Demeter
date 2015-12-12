@@ -1,71 +1,95 @@
 <% if notice %>
-<div class="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <p id="notice"><%= notice %></p>
-</div>
-<br/>
+    <div class="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <p id="notice"><%= notice %></p>
+    </div>
+    <br/>
 <% end %>
-
+<br/>
 <div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading"> <%= get_panel_title(@view_items) %> Grants</div>
-    <div class="panel-body">
-      <span class="pull-left">
-        <strong>Month</strong>
-        <label>
-          <select id="monthSelector" class="form-control">
-            <% @months.each do |granting_month| %>
-                <option name="<%=granting_month%>">
-                  <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
-                </option>
+  <div class="panel-heading"> Grants</div>
+  <div class="panel-body">
+    <div class="pull-right">
+      <table class="options-table">
+        <tr>
+          <th>Month</th>
+          <td>
+            <label>
+              <select id="monthSelector" class="form-control">
+                <% @months.each do |granting_month| %>
+                    <option name="<%= granting_month %>">
+                      <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
+                    </option>
                 <% end %>
-          </select>
-        </label>
-        <%= link_to 'Reset', grants_path %>
-      </span>
-      <span class="pull-right">
-        <%= link_to 'New Grant', new_grant_path, :class => 'btn btn-primary' %>
-        <%= link_to 'Execute Periodic Grants', {:action => 'periodic_grants'}, :class => 'btn btn-info'%>
-      </span>
-      <br/>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>GUID</th>
-            <th>Receiver wallet</th>
-            <th>Amount</th>
-            <th colspan="2"></th>
-          </tr>
-        </thead>
-
-        <% @grants.sort.each do |granting_month, month_grants| %>
-          <tbody>
-            <tr>
-              <td colspan="5" class="text-center bg-success">
-                <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
-              </td>
-            </tr>
-            <% month_grants.each do |grant| %>
-              <tr>
-                <td><%= grant.GUID %></td>
-                <td><%= grant.project.wallet_address %></td>
-                <td><%= solar_coin_amount(grant.amount) %></td>
-                <td><%= link_to 'Show', grant %></td>
-                <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        <% end %>
+              </select>
+            </label>
+          </td>
+          <th>Type</th>
+          <td>
+            <label>
+              <select id="typeSelector" class="form-control">
+                <option value="AGRT">Adjustment Grants</option>
+                <option value="PGRT">Periodic Grants</option>
+                <option value="ALL">All Grants</option>
+              </select>
+            </label>
+          </td>
+          <td>
+            <button id="updateButton" class="btn btn-primary btn-sm">Update</button>
+          </td>
+        </tr>
       </table>
     </div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>GUID</th>
+        <th>Receiver wallet</th>
+        <th>Amount</th>
+        <th>Tag</th>
+        <th colspan="2"></th>
+      </tr>
+      </thead>
+      <tbody id="data">
+
+      </tbody>
+    </table>
+  </div>
 </div>
-
 <script type="text/javascript" charset="utf-8">
-  $("#monthSelector").change(function() {
-    var date = $(this).val().split("-");
-    var month = date[0].trim();
-    var year = date[1].trim();
+    $("#updateButton").click(function () {
+      $.ajax({
+        url: "/grants",
+        dataType: 'json',
+        data: {
+          filter_date: $("#monthSelector").children(":selected").val(),
+          grant_type: $("#typeSelector").children(":selected").val()
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.log("AJAX Error: " + textStatus);
+        },
+        success: function (data, textStatus, jqXHR) {
+          $("#data").empty();
+          fillTable(data);
+        }
 
-    window.location = "/grants?month=" + month + " 1, " + year;
-  });
+      });
+    });
+    function fillTable(grants) {
+      grants.forEach(function(grant) {
+        var dom = "<tr>" +
+            td(grant.GUID) +
+            td(grant.receiver_wallet) +
+            td(grant.amount) +
+            td(grant.type_tag) +
+            "</tr>";
+        $("#data").append(dom);
+      });
+    }
+
+    function td(value) {
+      return "<td>" + value +"</td>";
+    }
+
+
 </script>
