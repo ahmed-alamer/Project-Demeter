@@ -90,9 +90,21 @@ class GrantsController < ApplicationController
   def read_grants_data
     filter_date = DateTime.parse(params[:filter_date])
 
-    Grant.where('created_at >= ?', filter_date)
+    grants = Grant.where('created_at >= ?', filter_date)
         .where('created_at <= ?', filter_date.end_of_month)
-        .where(:type_tag => params[:grant_type])
+
+    grants = grants.where(:type_tag => params[:grant_type]) if params[:grant_type] != 'ALL'
+
+    grants.map do |grant|
+      {
+          :guid => grant.GUID,
+          :generator_id => grant.project.id,
+          :claimant_id => grant.project.claimant.id,
+          :wallet => grant.receiver_wallet,
+          :type_tag => grant.type_tag,
+          :amount => grant.amount
+      }
+    end
   end
 
   def set_grant

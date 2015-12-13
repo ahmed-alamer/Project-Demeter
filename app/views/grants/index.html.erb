@@ -10,7 +10,7 @@
   <div class="panel-heading"> Grants</div>
   <div class="panel-body">
     <div class="pull-right">
-      <table class="options-table">
+      <table id="grantsTable" class="options-table">
         <tr>
           <th>Month</th>
           <td>
@@ -44,10 +44,11 @@
       <thead>
       <tr>
         <th>GUID</th>
+        <th>Claimant ID</th>
+        <th>Generator ID</th>
         <th>Receiver wallet</th>
         <th>Amount</th>
         <th>Tag</th>
-        <th colspan="2"></th>
       </tr>
       </thead>
       <tbody id="data">
@@ -78,8 +79,10 @@
     function fillTable(grants) {
       grants.forEach(function(grant) {
         var dom = "<tr>" +
-            td(grant.GUID) +
-            td(grant.receiver_wallet) +
+            td(grant.guid) +
+            td(grant.claimant_id) +
+            td(grant.generator_id) +
+            td(grant.wallet) +
             td(grant.amount) +
             td(grant.type_tag) +
             "</tr>";
@@ -90,6 +93,4 @@
     function td(value) {
       return "<td>" + value +"</td>";
     }
-
-
 </script>
