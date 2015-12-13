@@ -6,13 +6,16 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <!-- Latest compiled and minified CSS & JS -->
-  <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="http://bootswatch.com/paper/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href=//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
   <style type="text/css">
-  	.twitter-typeahead { width: 100%; } 
+  	.twitter-typeahead { width: 100%; }
   	.typeahead:focus {
   	  border: 2px solid #0097cf;
   	}
@@ -87,30 +90,37 @@
 			<ul class="nav navbar-nav">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Legal Entities <b class="caret"></b>
+            Records <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to 'All Legal Entities', claimants_path %></li>
+            <li><%= link_to 'Legal Entities', claimants_path %></li>
+            <li><%= link_to 'Facilities', projects_path%></li>
+            <li><%= link_to 'Approval Status Codes', approval_statuses_path %></li>
           </ul>
         </li>
 	      <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Facilities <b class="caret"></b>
+            Granting <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to 'All Facilities', projects_path %></li>
-            <li><%= link_to 'Approve Facilities', approve_projects_path %></li>
-            <li><%= link_to 'Approval Status Codes', approval_statuses_path %></li>
+            <li>
+              <%= link_to 'Approve Facilities', approve_projects_path %>
+            </li>
+            <li>
+              <%= link_to 'Execute Adjustment Grants', adjustment_grants_path %>
+            </li>
+            <li>
+              <%= link_to 'Execute Periodic Grants', periodic_grants_path %>
+            </li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Grants <b class="caret"></b>
+            Reports <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to 'Adjustment Grants', grants_path(:view => 'AGRT') %></li>
-            <li><%= link_to 'Periodic Grants', grants_path(:view => 'PGRT') %></li>
-            <li><%= link_to 'Bounty Grants', grants_path(:view => 'BGRT') %></li>
+            <li><%= link_to 'Facilities', projects_path %></li>
+            <li><%= link_to 'Grants', grants_path %></li>
           </ul>
         </li>
 			</ul>

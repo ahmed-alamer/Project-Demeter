@@ -1,19 +1,23 @@
 Rails.application.routes.draw do
 
-  get 'approve_projects/index'
-
-  resources :approve_projects
-  get 'approve_projects/queue' => 'approve_projects#adjstment_grants_queue'
-
-  get 'grants/periodic_grants' => 'grants#periodic_grants'
-
-
   resources :approval_statuses
   resources :grants
   resources :bounties
   resources :projects
   resources :claimants
 
+  # Granting Engine Routes
+  get 'approve_projects',
+      to: 'granting_engine#approve_projects',
+      as: 'approve_projects'
+
+  get 'adjustment_grants',
+      to: 'granting_engine#adjustment_grants',
+      as: 'adjustment_grants'
+
+  get 'periodic_grants',
+      to: 'granting_engine#periodic_grants',
+      as: 'periodic_grants'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,29 +1,14 @@
 class GrantsController < ApplicationController
   before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :get_project, only: [:create, :update]
-  before_action :set_receiver_wallet, only: [:create, :update]
-  after_action :set_guid, only: [:create, :update]
 
   # GET /grants
   # GET /grants.json
   def index
-    # So whoever reads this code, please, if you know a better way to do this pull it!
-    @view_items = params[:view] ? params[:view] : 'AGRT'
-
-    if params[:month]
-      date = DateTime.parse(params[:month])
-      @grants = Grant.where(:type_tag => @view_items)
-                    .where('created_at >= ?',  date)
-                    .where('created_at <= ?', date.end_of_month)
-                    .all
-                    .group_by { |grant| grant.created_at.beginning_of_month }
-    else
-      @grants = Grant.where(:type_tag => @view_items)
-                    .all
-                    .group_by { |grant| grant.created_at.beginning_of_month }
+    respond_to do |format|
+      format.html { prepare_view }
+      format.json { render :json => read_grants_data.to_json }
     end
-
-    @months = Grant.uniq.pluck(:created_at)
   end
 
   # GET /grants/1
@@ -90,56 +75,38 @@ class GrantsController < ApplicationController
     end
   end
 
-  def periodic_grants
-    @grants = generate_periodic_grants(Project.all).compact
-    respond_to do |format|
-      format.html
-      format.csv do
-        @grants.each { |grant| grant.save }
-        file_name = "\"#{Date.today}-periodic-grants\""
-        headers['Content-Disposition'] = "attachment; filename=#{file_name}"
-        # headers['Content-Type'] = 'text/csv'
-      end
-    end
-
-  end
-
   private
-  def generate_periodic_grants(projects)
-    projects.map do |project|
-      grant_date = Date.today
-      six_months = project.install_date.advance(:months => 6)
-      six_months = Date.new(grant_date.year, six_months.month, six_months.day)
-      unless six_months > grant_date
-        grant_date = Time.now
-        grant = Grant.new(:project => project,
-                          :receiver_wallet => project.wallet_address,
-                          :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
-                          :grant_date => grant_date,
-                          :created_at => grant_date,
-                          :updated_at => grant_date,
-                          :type_tag => 'PGRT')
+  def prepare_view
+    @months = Array.new
+    date_iterator = Date.new(2013, 1, 1)
+    today = Date.today
 
-        grant.GUID = generate_guid(grant)
-
-        grant
-
-        # grant.created_at = grant_date
-        # grant.updated_at = grant_date
-        # grant.grant_date = grant_date
-        # grant.project = project
-        # grant.receiver_wallet = project.claimant.wallets.first
-        # puts "claimant = #{project.claimant}"
-        # grant.type_tag = 'PGRT'
-        # grant.GUID = generate_guid(grant)
-        #
-        # grant
-      end
+    while date_iterator < today
+      @months << date_iterator
+      date_iterator = date_iterator.advance(:months => 1)
     end
-
   end
 
-  # Use callbacks to share common setup or constraints between actions.
+  def read_grants_data
+    filter_date = DateTime.parse(params[:filter_date])
+
+    grants = Grant.where('created_at >= ?', filter_date)
+        .where('created_at <= ?', filter_date.end_of_month)
+
+    grants = grants.where(:type_tag => params[:grant_type]) if params[:grant_type] != 'ALL'
+
+    grants.map do |grant|
+      {
+          :guid => grant.GUID,
+          :generator_id => grant.project.id,
+          :claimant_id => grant.project.claimant.id,
+          :wallet => grant.receiver_wallet,
+          :type_tag => grant.type_tag,
+          :amount => grant.amount
+      }
+    end
+  end
+
   def set_grant
     @grant = Grant.find(params[:id])
     @grant.project_id = @grant.project.name
@@ -150,63 +117,6 @@ class GrantsController < ApplicationController
     params[:grant][:project_id] = project.id
   end
 
-  def set_receiver_wallet
-    grant = params[:grant]
-    wallet = grant_params[:receiver_wallet]
-    grant[:receiver_wallet] = Wallet.where(:tag => wallet).first.id
-  end
-
-  def set_guid
-    if @grant.type_tag == 'AGRT'
-      install_date = Project.find(@grant.project.id).install_date
-      @grant.grant_date = adjust_date(install_date)
-    end
-
-    @grant.GUID = "#{@grant.type_tag}-"+
-                  "#{@grant.project.country}-"+
-                  "#{@grant.project.post_code}-"+
-                  "#{@grant.project.id}-"+
-                  "#{@grant.project.nameplate}-"+
-                  "#{@grant.project.claimant_id}-"+
-                  "#{@grant.project.install_date.to_formatted_s(:iso8601)}-"+
-                  "#{@grant.created_at.strftime('%Y-%grant-%d')}"
-    @grant.save
-  end
-
-  def set_grant_date
-    if @grant.type_tag == 'AGRT'
-      @grant.grant_date = adjust_date(@grant.project.install_date)
-    else
-      @grant.grant_date = Date.today
-    end
-  end
-
-  def adjust_date(install_date)
-    if install_date.year < 2010
-      install_date = Date.new(2010,1,1)
-    end
-
-    next_anniversary = Date.new(Date.today.year, install_date.month, install_date.day)
-    six_months  = next_anniversary.advance(:months => 6)
-
-    if Date.today > six_months
-      Date.new(six_months.year, six_months.month, 1)
-    else
-      Date.new(six_months.year - 1, six_months.month, 1)
-      # Why is isn't there a retreat method!?
-    end
-  end
-
-  def generate_guid(grant)
-    "#{grant.type_tag}-"+
-        "#{grant.project.country}-"+
-        "#{grant.project.post_code}-"+
-        "#{grant.project.id}-"+
-        "#{grant.project.nameplate}-"+
-        "#{grant.project.claimant_id}-"+
-        "#{grant.project.install_date.to_formatted_s(:iso8601)}-"+
-        "#{grant.created_at.strftime('%Y-%grant-%d')}"
-  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def grant_params
