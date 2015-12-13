@@ -7,6 +7,6 @@ module ProjectsHelper
   end
 
   def display_nameplate(nameplate)
-    number_to_human(nameplate, units: {unit: 'kW', thousand: 'mW', million: 'gW'})
+		"#{number_with_delimiter(nameplate, separator: '.', delimiter: ',')} KW"
   end
 end

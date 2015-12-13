@@ -1,13 +1,10 @@
 <div class="panel panel-info">
   <div class="panel-heading">
-    <h3 class="panel-title">AGRT GRANTS</h3>
+    <h3 class="panel-title">Periodic Grants</h3>
   </div>
   <div class="panel-body">
     <div class="pull-right">
       <button id="executeButton" class="btn btn-success">Save & Download List</button>
-      <%= link_to 'Back to Facilities',
-                  projects_path(:status => 'A'),
-                  :class => 'btn btn-default' %>
     </div>
   </div>
   <table class="table table-hover">
@@ -37,6 +34,6 @@
   console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
   $('#executeButton').click(function() {
     $(this).prop('disabled', true);
-    window.location = '<%= url_for :action => 'periodic_grants', :format => :csv %>';
+    window.location = '<%= periodic_grants_path :format => :csv %>';
   });
 </script>
