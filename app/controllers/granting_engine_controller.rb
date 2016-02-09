@@ -23,7 +23,7 @@ class GrantingEngineController < ApplicationController
       project_entity.save
     end
 
-    render json: {'answer': 'success'}
+    render json: {:answer => 'success'}
   end
 
   def adjustment_grants
