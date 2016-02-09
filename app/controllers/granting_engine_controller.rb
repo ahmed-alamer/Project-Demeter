@@ -49,7 +49,8 @@ class GrantingEngineController < ApplicationController
       format.html
       format.csv do
         @grants.each { |grant| grant.save }
-        file_name = "\"#{Date.today}-periodic-grants\""
+        today = Date.today
+        file_name = "\"#{today}-periodic-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
       end
