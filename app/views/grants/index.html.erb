@@ -16,10 +16,22 @@
           <td>
             <label>
               <select id="monthSelector" class="form-control">
-                <% @months.each do |granting_month| %>
-                    <option name="<%= granting_month %>">
-                      <%= Date::MONTHNAMES[granting_month.month] %> - <%= granting_month.year %>
-                    </option>
+                <% Date::MONTHNAMES.each_with_index do |month, index| %>
+                    <% if month != nil %>
+                        <option value="<%= index %>">
+                          <%= month %>
+                        </option>
+                    <% end %>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <th>Year</th>
+          <td>
+            <label>
+              <select id="yearSelector" class="form-control">
+                <% Date.today.year.downto(2013).each do |year| %>
+                    <option value="<%= year %>>"><%= year %></option>
                 <% end %>
               </select>
             </label>
@@ -58,39 +70,39 @@
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-    $("#updateButton").click(function () {
-      $.ajax({
-        url: "/grants",
-        dataType: 'json',
-        data: {
-          filter_date: $("#monthSelector").children(":selected").val(),
-          grant_type: $("#typeSelector").children(":selected").val()
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.log("AJAX Error: " + textStatus);
-        },
-        success: function (data, textStatus, jqXHR) {
-          $("#data").empty();
-          fillTable(data);
-        }
+  $("#updateButton").click(function () {
+    $.ajax({
+      url: "/grants",
+      dataType: 'json',
+      data: {
+        filter_date: $("#monthSelector").children(":selected").val(),
+        grant_type: $("#typeSelector").children(":selected").val()
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log("AJAX Error: " + textStatus);
+      },
+      success: function (data, textStatus, jqXHR) {
+        $("#data").empty();
+        fillTable(data);
+      }
 
-      });
     });
-    function fillTable(grants) {
-      grants.forEach(function(grant) {
-        var dom = "<tr>" +
-            td(grant.guid) +
-            td(grant.claimant_id) +
-            td(grant.generator_id) +
-            td(grant.wallet) +
-            td(grant.amount) +
-            td(grant.type_tag) +
-            "</tr>";
-        $("#data").append(dom);
-      });
-    }
+  });
+  function fillTable(grants) {
+    grants.forEach(function (grant) {
+      var dom = "<tr>" +
+          td(grant.guid) +
+          td(grant.claimant_id) +
+          td(grant.generator_id) +
+          td(grant.wallet) +
+          td(grant.amount) +
+          td(grant.type_tag) +
+          "</tr>";
+      $("#data").append(dom);
+    });
+  }
 
-    function td(value) {
-      return "<td>" + value +"</td>";
-    }
+  function td(value) {
+    return "<td>" + value + "</td>";
+  }
 </script>
