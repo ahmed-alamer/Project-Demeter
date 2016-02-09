@@ -44,12 +44,15 @@ class GrantingEngineController < ApplicationController
 
   def periodic_grants
     @grants = generate_periodic_grants(Project.all).compact
+    today = Date.today
 
     respond_to do |format|
       format.html
       format.csv do
         @grants.each { |grant| grant.save }
-        today = Date.today
+        GrantedMonth.new(:grant_month => today.month, :grant_year => today.year).save
+
+        #CSV Download
         file_name = "\"#{today}-periodic-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"

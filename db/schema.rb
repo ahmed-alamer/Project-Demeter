@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207221007) do
+ActiveRecord::Schema.define(version: 20160209052550) do
 
   create_table "approval_statuses", primary_key: "code", force: :cascade do |t|
     t.string   "details",    limit: 255
@@ -37,13 +37,10 @@ ActiveRecord::Schema.define(version: 20160207221007) do
   end
 
   create_table "granted_months", force: :cascade do |t|
-    t.integer "month",      limit: 4
-    t.boolean "is_granted", limit: 1
-  end
-
-  create_table "granting_recorders", force: :cascade do |t|
-    t.integer "grant_month", limit: 4
-    t.boolean "is_granted",  limit: 1
+    t.integer  "grant_month", limit: 4
+    t.integer  "grant_year",  limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   create_table "grants", force: :cascade do |t|
