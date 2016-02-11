@@ -19,8 +19,9 @@
       </span>
       <br/>
       <hr/>
-      <table id="projectsTable" class="table table-responsive table-hover">
-        <thead>
+      <div class="table-responsive">
+        <table id="projectsTable" class="table table-hover">
+          <thead>
           <tr>
             <th>Generator ID</th>
             <th>Claimant Email</th>
@@ -35,32 +36,34 @@
             <th></th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <% @projects.each do |project| %>
-            <tr>
-              <td><%= project.id %></td>
-              <td><%= project.claimant.email %></td>
-              <td><%= project.claimant_id %></td>
-              <td><%= project.status == 'P' ? 'Pending' : project.status %></td>
-              <td><%= display_nameplate(project.nameplate) %></td>
-              <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
-              <td><%= project.wallet_address %></td>
-              <td><%= project.address %></td>
-              <td><%= project.post_code %></td>
-              <td><%= project.country %></td>
-              <td><%= link_to 'Show', project %></td>
-              <td><%= link_to 'Edit', edit_project_path(project) %></td>
-            </tr>
+              <tr>
+                <td><%= project.id %></td>
+                <td><%= project.claimant.email %></td>
+                <td><%= project.claimant_id %></td>
+                <td><%= project.status == 'P' ? 'Pending' : project.status %></td>
+                <td><%= display_nameplate(project.nameplate) %></td>
+                <td><%= project.install_date.to_formatted_s(:iso8601) %></td>
+                <td><%= project.wallet_address %></td>
+                <td><%= project.address %></td>
+                <td><%= project.post_code %></td>
+                <td><%= project.country %></td>
+                <td><%= link_to 'Show', project %></td>
+                <td><%= link_to 'Edit', edit_project_path(project) %></td>
+              </tr>
           <% end %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
       <script type="text/javascript">
         $(document).ready(function() {
           $('#projectsTable').DataTable( {
             "paging": true,
             "ordering": true,
             "info": true,
+            "responsive": true,
             "pagingType": "full_numbers"
           });
         });

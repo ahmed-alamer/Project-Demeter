@@ -31,7 +31,7 @@
             <label>
               <select id="yearSelector" class="form-control">
                 <% Date.today.year.downto(2013).each do |year| %>
-                    <option value="<%= year %>>"><%= year %></option>
+                    <option value="<%= year %>"><%= year %></option>
                 <% end %>
               </select>
             </label>
@@ -75,7 +75,8 @@
       url: "/grants",
       dataType: 'json',
       data: {
-        filter_date: $("#monthSelector").children(":selected").val(),
+        filter_month: $("#monthSelector").children(":selected").val(),
+        filter_year: $("#yearSelector").children(":selected").val(),
         grant_type: $("#typeSelector").children(":selected").val()
       },
       error: function (jqXHR, textStatus, errorThrown) {

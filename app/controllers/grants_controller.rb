@@ -88,7 +88,7 @@ class GrantsController < ApplicationController
   end
 
   def read_grants_data
-    filter_date = DateTime.parse(params[:filter_date])
+    filter_date = DateTime.parse("#{params[:filter_year]}-#{params[:filter_month]}-01")
 
     grants = Grant.where('created_at >= ?', filter_date)
         .where('created_at <= ?', filter_date.end_of_month)
