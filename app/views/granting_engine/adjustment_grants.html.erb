@@ -7,17 +7,18 @@
       <button id="executeButton" class="btn btn-success">Save & Download List</button>
     </div>
   </div>
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th>Project</th>
-      <th>Amount</th>
-      <th>Receiver Wallet</th>
-      <th>Receiver Email</th>
-      <th>Type</th>
-    </tr>
-    </thead>
-    <tbody>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Project</th>
+        <th>Amount</th>
+        <th>Receiver Wallet</th>
+        <th>Receiver Email</th>
+        <th>Type</th>
+      </tr>
+      </thead>
+      <tbody>
       <% @adjustment_grants.each do |grant| %>
           <tr>
             <td><%= grant.project.id %></td>
@@ -27,8 +28,9 @@
             <td><%= grant.type_tag %></td> <!-- obviously! -->
           </tr>
       <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
 <script type="text/javascript" charset="utf-8">
   $('#executeButton').click(function() {
