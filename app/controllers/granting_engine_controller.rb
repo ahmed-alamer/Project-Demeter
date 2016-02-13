@@ -43,7 +43,7 @@ class GrantingEngineController < ApplicationController
   end
 
   def periodic_grants
-    @grants = generate_periodic_grants(Project.all).compact
+    @grants = generate_periodic_grants(Project.all, params[:target_date]).compact
     today = Date.today
 
     respond_to do |format|
@@ -72,18 +72,18 @@ class GrantingEngineController < ApplicationController
     end
   end
 
-  def generate_periodic_grants(projects)
+  def generate_periodic_grants(projects, target_date)
     projects.map do |project|
-      grant_date = Date.today
+      @grant_date = target_date.nil? ? Date.today : Date.parse(target_date)
       six_months = project.install_date.advance(:months => 6)
-      six_months = Date.new(grant_date.year, six_months.month, six_months.day)
+      six_months = Date.new(@grant_date.year, six_months.month, six_months.day)
 
-      unless six_months > grant_date
+      unless six_months > @grant_date
         Grant.new(:GUID => generate_guid('PGRT', project),
                   :project => project,
                   :receiver_wallet => project.wallet_address,
                   :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
-                  :grant_date => grant_date,
+                  :grant_date => @grant_date,
                   :type_tag => 'PGRT')
       end
     end
