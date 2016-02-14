@@ -23,7 +23,7 @@ class GrantingEngineController < ApplicationController
       project_entity.save
     end
 
-    render json: {'answer': 'success'}
+    render json: {:answer => 'success'}
   end
 
   def adjustment_grants
@@ -43,13 +43,26 @@ class GrantingEngineController < ApplicationController
   end
 
   def periodic_grants
+    target_date = params[:target_date]
+    @grant_date = target_date.nil? ? Date.today : Date.parse(target_date)
+
+    granted_month_filter = {:grant_month => @grant_date.month, :grant_year => @grant_date.year}
+    if GrantedMonth.where(granted_month_filter).any?
+      @granted_month = true
+    else
+      @granted_month = false
+    end
+
     @grants = generate_periodic_grants(Project.all).compact
 
     respond_to do |format|
       format.html
       format.csv do
         @grants.each { |grant| grant.save }
-        file_name = "\"#{Date.today}-periodic-grants\""
+        GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
+
+        #CSV Download
+        file_name = "\"#{@grant_date.to_s}-periodic-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
       end
@@ -70,16 +83,15 @@ class GrantingEngineController < ApplicationController
 
   def generate_periodic_grants(projects)
     projects.map do |project|
-      grant_date = Date.today
       six_months = project.install_date.advance(:months => 6)
-      six_months = Date.new(grant_date.year, six_months.month, six_months.day)
+      six_months = Date.new(@grant_date.year, six_months.month, six_months.day)
 
-      unless six_months > grant_date
+      unless six_months > @grant_date
         Grant.new(:GUID => generate_guid('PGRT', project),
                   :project => project,
                   :receiver_wallet => project.wallet_address,
                   :amount => 180 * project.nameplate * 0.15, # 6 months = 180 days
-                  :grant_date => grant_date,
+                  :grant_date => @grant_date,
                   :type_tag => 'PGRT')
       end
     end

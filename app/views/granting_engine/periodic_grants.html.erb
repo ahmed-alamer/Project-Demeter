@@ -4,36 +4,83 @@
   </div>
   <div class="panel-body">
     <div class="pull-right">
-      <button id="executeButton" class="btn btn-success">Save & Download List</button>
+      <table id="grantsTable" class="options-table">
+        <tr>
+          <th>Month</th>
+          <td>
+            <label>
+              <select id="monthSelector" class="form-control">
+                <% Date::MONTHNAMES.each_with_index do |month, index| %>
+                    <% if month != nil %>
+                        <option value="<%= index %>">
+                          <%= month %>
+                        </option>
+                    <% end %>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <th>Year</th>
+          <td>
+            <label>
+              <select id="yearSelector" class="form-control">
+                <% Date.today.year.downto(2013).each do |year| %>
+                    <option value="<%= year %>"><%= year %></option>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <td>
+            <button id="executeButton" class="btn btn-success btn-sm">Save & Download List</button>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th>Project</th>
-      <th>Amount</th>
-      <th>Receiver Wallet</th>
-      <th>Receiver Email</th>
-      <th>Type</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @grants.each do |grant| %>
-        <tr>
-          <td><%= grant.project.id %></td>
-          <td><%= solar_coin_amount(grant.amount) %></td>
-          <td><%= grant.project.wallet_address %></td>
-          <td><%= grant.project.claimant.email %></td>
-          <td><%= grant.type_tag %></td> <!-- obviously! -->
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Project</th>
+        <th>Amount</th>
+        <th>Receiver Wallet</th>
+        <th>Receiver Email</th>
+        <th>Type</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @grants.each do |grant| %>
+          <tr>
+            <td><%= grant.project.id %></td>
+            <td><%= solar_coin_amount(grant.amount) %></td>
+            <td><%= grant.project.wallet_address %></td>
+            <td><%= grant.project.claimant.email %></td>
+            <td><%= grant.type_tag %></td> <!-- obviously! -->
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
 <script type="text/javascript" charset="utf-8">
+  $("#monthSelector").val("<%=@grant_date.month%>");
+  $("#yearSelector").val("<%=@grant_date.year%>");
+
+  $("#executeButton").prop('disabled', <%= @granted_month %>); //YeeHaw! That was shitty!
+
+  function getTargetDateParameter() {
+    var year = $("#yearSelector").children(":selected").val();
+    var month = $("#monthSelector").children(":selected").val();
+    return "?target_date=" + year + "-" + month + "-01";
+  }
+
+  $("#monthSelector, #yearSelector").change(function () {
+    window.location = "/periodic_grants" + getTargetDateParameter();
+  });
+
   console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
-  $('#executeButton').click(function() {
+  $('#executeButton').click(function () {
     $(this).prop('disabled', true);
-    window.location = '<%= periodic_grants_path :format => :csv %>';
+    window.location = '<%= periodic_grants_path :format => :csv %>' + getTargetDateParameter();
   });
 </script>

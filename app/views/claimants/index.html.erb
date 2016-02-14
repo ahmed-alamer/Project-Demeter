@@ -1,20 +1,23 @@
 <% if notice %>
-<div class="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <p id="notice"><%= notice %></p>
-</div>
-<br/>
+    <div class="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <p id="notice"><%= notice %></p>
+    </div>
+    <br/>
 <% end %>
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading">Legal Entities</div>
-    <div class="panel-body">
+  <div class="panel-body">
+    <div class="clearfix">
       <span class="pull-right">
         <%= link_to 'New Legal Entity', new_claimant_path, :class => "btn btn-primary" %>
       </span>
     </div>
-    <table id="claimantsTable" class="table table-hover">
-      <thead>
+    <hr/>
+    <div class="table-responsive">
+      <table id="claimantsTable" class="table table-hover">
+        <thead>
         <tr>
           <th>ID</th>
           <th>First Name</th>
@@ -23,25 +26,27 @@
           <th></th>
           <th></th>
         </tr>
-      </thead>
+        </thead>
 
-      <tbody>
+        <tbody>
         <% @claimants.each do |claimant| %>
-          <tr>
-            <td><%= claimant.id %></td>
-            <td><%= claimant.first_name %></td>
-            <td><%= claimant.last_name %></td>
-            <td><%= claimant.email %></td>
-            <td><%= link_to 'Show', claimant %></td>
-            <td><%= link_to 'Edit', edit_claimant_path(claimant) %></td>
-          </tr>
+            <tr>
+              <td><%= claimant.id %></td>
+              <td><%= claimant.first_name %></td>
+              <td><%= claimant.last_name %></td>
+              <td><%= claimant.email %></td>
+              <td><%= link_to 'Show', claimant %></td>
+              <td><%= link_to 'Edit', edit_claimant_path(claimant) %></td>
+            </tr>
         <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#claimantsTable').DataTable( {
+  $(document).ready(function () {
+    $('#claimantsTable').DataTable({
       "paging": true,
       "ordering": true,
       "info": true,
