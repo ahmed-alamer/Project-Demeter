@@ -79,6 +79,8 @@
   console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
   $('#executeButton').click(function() {
     $(this).prop('disabled', true);
-    window.location = '<%= periodic_grants_path :format => :csv %>';
+    var year = $("#yearSelector").children(":selected").val();
+    var month = $("#monthSelector").children(":selected").val();
+    window.location = '<%= periodic_grants_path :format => :csv %>' + '?target_date=' + year + "-" + month + "-01";
   });
 </script>
