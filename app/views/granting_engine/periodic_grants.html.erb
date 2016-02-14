@@ -4,40 +4,37 @@
   </div>
   <div class="panel-body">
     <div class="pull-right">
-      <div class="pull-right">
-        <table id="grantsTable" class="options-table">
-          <tr>
-            <th>Month</th>
-            <td>
-              <label>
-                <select id="monthSelector" class="form-control">
-                  <% Date::MONTHNAMES.each_with_index do |month, index| %>
-                      <% if month != nil %>
-                          <option value="<%= index %>">
-                            <%= month %>
-                          </option>
-                      <% end %>
-                  <% end %>
-                </select>
-              </label>
-            </td>
-            <th>Year</th>
-            <td>
-              <label>
-                <select id="yearSelector" class="form-control">
-                  <% Date.today.year.downto(2013).each do |year| %>
-                      <option value="<%= year %>"><%= year %></option>
-                  <% end %>
-                </select>
-              </label>
-            </td>
-            <td>
-              <button id="executeButton" class="btn btn-success btn-sm">Save & Download List</button>
-            </td>
-          </tr>
-        </table>
-      </div>
-
+      <table id="grantsTable" class="options-table">
+        <tr>
+          <th>Month</th>
+          <td>
+            <label>
+              <select id="monthSelector" class="form-control">
+                <% Date::MONTHNAMES.each_with_index do |month, index| %>
+                    <% if month != nil %>
+                        <option value="<%= index %>">
+                          <%= month %>
+                        </option>
+                    <% end %>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <th>Year</th>
+          <td>
+            <label>
+              <select id="yearSelector" class="form-control">
+                <% Date.today.year.downto(2013).each do |year| %>
+                    <option value="<%= year %>"><%= year %></option>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <td>
+            <button id="executeButton" class="btn btn-success btn-sm">Save & Download List</button>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
   <div class="table-responsive">
@@ -66,21 +63,24 @@
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-
   $("#monthSelector").val("<%=@grant_date.month%>");
   $("#yearSelector").val("<%=@grant_date.year%>");
 
-  $("#monthSelector, #yearSelector").change(function () {
+  $("#executeButton").prop('disabled', <%= @granted_month %>); //YeeHaw! That was shitty!
+
+  function getTargetDateParameter() {
     var year = $("#yearSelector").children(":selected").val();
     var month = $("#monthSelector").children(":selected").val();
-    window.location = "/periodic_grants?target_date=" + year + "-" + month + "-01";
+    return "?target_date=" + year + "-" + month + "-01";
+  }
+
+  $("#monthSelector, #yearSelector").change(function () {
+    window.location = "/periodic_grants" + getTargetDateParameter();
   });
 
   console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
-  $('#executeButton').click(function() {
+  $('#executeButton').click(function () {
     $(this).prop('disabled', true);
-    var year = $("#yearSelector").children(":selected").val();
-    var month = $("#monthSelector").children(":selected").val();
-    window.location = '<%= periodic_grants_path :format => :csv %>' + '?target_date=' + year + "-" + month + "-01";
+    window.location = '<%= periodic_grants_path :format => :csv %>' + getTargetDateParameter();
   });
 </script>

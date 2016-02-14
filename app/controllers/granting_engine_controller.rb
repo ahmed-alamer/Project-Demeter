@@ -43,17 +43,26 @@ class GrantingEngineController < ApplicationController
   end
 
   def periodic_grants
-    @grants = generate_periodic_grants(Project.all, params[:target_date]).compact
-    today = Date.today
+    target_date = params[:target_date]
+    @grant_date = target_date.nil? ? Date.today : Date.parse(target_date)
+
+    granted_month_filter = {:grant_month => @grant_date.month, :grant_year => @grant_date.year}
+    if GrantedMonth.where(granted_month_filter).any?
+      @granted_month = true
+    else
+      @granted_month = false
+    end
+
+    @grants = generate_periodic_grants(Project.all).compact
 
     respond_to do |format|
       format.html
       format.csv do
         @grants.each { |grant| grant.save }
-        GrantedMonth.new(:grant_month => today.month, :grant_year => today.year).save
+        GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
 
         #CSV Download
-        file_name = "\"#{today}-periodic-grants\""
+        file_name = "\"#{@grant_date.to_s}-periodic-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
       end
@@ -72,9 +81,8 @@ class GrantingEngineController < ApplicationController
     end
   end
 
-  def generate_periodic_grants(projects, target_date)
+  def generate_periodic_grants(projects)
     projects.map do |project|
-      @grant_date = target_date.nil? ? Date.today : Date.parse(target_date)
       six_months = project.install_date.advance(:months => 6)
       six_months = Date.new(@grant_date.year, six_months.month, six_months.day)
 
