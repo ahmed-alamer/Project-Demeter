@@ -57,15 +57,14 @@ class GrantingEngineController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv do
-        @grants.each { |grant| grant.save }
-        GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
+      format.csv dox
+      @grants.each { |grant| grant.save }
+      GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
 
-        #CSV Download
-        file_name = "\"#{@grant_date.to_s}-periodic-grants\""
-        headers['Content-Type'] = 'text/csv'
-        headers['Content-Disposition'] = "attachment; filename=#{file_name}"
-      end
+      #CSV Download
+      file_name = "\"#{@grant_date.to_s}-periodic-grants\""
+      headers['Content-Type'] = 'text/csv'
+      headers['Content-Disposition'] = "attachment; filename=#{file_name}"
     end
   end
 
@@ -133,5 +132,4 @@ class GrantingEngineController < ApplicationController
     day_diff = grant_date - project_install_date
     (24 * (project.nameplate) * day_diff * 0.15) / 1000
   end
-
 end
