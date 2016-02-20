@@ -14,9 +14,9 @@
         <%= get_button_link 'Approved Facilities', 'A' %>
         <%= get_button_link 'Rejected Facilities', 'R' %>
       </span>
-      <span class="pull-right">
-        <%= link_to 'New Facility', new_project_path, :class => 'btn btn-primary' %>
-      </span>
+      <!--<span class="pull-right">-->
+        <!--<%= link_to 'New Facility', new_project_path, :class => 'btn btn-primary' %>-->
+      <!--</span>-->
       <br/>
       <hr/>
       <div class="table-responsive">
@@ -33,14 +33,14 @@
             <th>Address</th>
             <th>Post code</th>
             <th>Country</th>
-            <th></th>
-            <th></th>
+            <th>Received</th>
+            <th>Updated</th>
           </tr>
           </thead>
           <tbody>
           <% @projects.each do |project| %>
               <tr>
-                <td><%= project.id %></td>
+                <td><%= link_to "#{project.id}", project %></td>
                 <td><%= project.claimant.email %></td>
                 <td><%= project.claimant_id %></td>
                 <td><%= project.status == 'P' ? 'Pending' : project.status %></td>
@@ -50,8 +50,8 @@
                 <td><%= project.address %></td>
                 <td><%= project.post_code %></td>
                 <td><%= project.country %></td>
-                <td><%= link_to 'Show', project %></td>
-                <td><%= link_to 'Edit', edit_project_path(project) %></td>
+                <td><%= project.created_at.strftime('%Y-%m-%d')  %></td>
+                <td><%= project.updated_at.strftime('%Y-%m-%d') %></td>
               </tr>
           <% end %>
           </tbody>
@@ -63,7 +63,6 @@
             "paging": true,
             "ordering": true,
             "info": true,
-            "responsive": true,
             "pagingType": "full_numbers"
           });
         });

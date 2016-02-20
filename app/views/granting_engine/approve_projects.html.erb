@@ -50,8 +50,12 @@
 
       <span class="pull-right">
 	  		<button type="button"
-                disabled="
-                  <% not @projects.empty? %>"
+                <%=
+                  #this is so fucked up, I am migrating off rails very soon!
+                  if @projects.empty?
+                    ' disabled '
+                  end
+                %>
                 onclick="submitProjects()"
                 class="btn btn-sm btn-success">
           Submit
