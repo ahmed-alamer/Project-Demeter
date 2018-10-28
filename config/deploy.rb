@@ -3,7 +3,7 @@ lock '3.4.0'
 
 set :application, 'project_demeter'
 set :repo_url, 'git@github.com:ahmed-isam/Project-Demeter.git'
-
+set :branch, 'refactoring/theta-sprint'
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

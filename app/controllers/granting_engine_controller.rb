@@ -2,6 +2,10 @@ require 'csv'
 
 class GrantingEngineController < ApplicationController
 
+  def index
+
+  end
+
   def approve_projects
     @projects = Project.where(:status => 'P')
   end
@@ -35,6 +39,13 @@ class GrantingEngineController < ApplicationController
       format.html
       format.csv do
         @adjustment_grants.each { |grant| grant.save }
+
+        @adjustment_grants.each do |grant|
+          project = grant.project
+          project.adjusted
+          project.save
+        end
+
         file_name = "\"#{Date.today}-grants\""
         headers['Content-Type'] = 'text/csv'
         headers['Content-Disposition'] = "attachment; filename=#{file_name}"
@@ -57,14 +68,15 @@ class GrantingEngineController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv dox
-      @grants.each { |grant| grant.save }
-      GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
+      format.csv do
+        @grants.each { |grant| grant.save }
+        GrantedMonth.new(:grant_month => @grant_date.month, :grant_year => @grant_date.year).save
 
-      #CSV Download
-      file_name = "\"#{@grant_date.to_s}-periodic-grants\""
-      headers['Content-Type'] = 'text/csv'
-      headers['Content-Disposition'] = "attachment; filename=#{file_name}"
+        #CSV Download
+        file_name = "\"#{@grant_date.to_s}-periodic-grants\""
+        headers['Content-Type'] = 'text/csv'
+        headers['Content-Disposition'] = "attachment; filename=#{file_name}"
+      end
     end
   end
 

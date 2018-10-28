@@ -3,8 +3,43 @@
     <h3 class="panel-title">Adjustment Grants</h3>
   </div>
   <div class="panel-body">
+    <span class="btn-group pull-left" role="group" aria-label="...">
+      <%= get_adjustment_grants_link(true) %>
+          <%= get_periodic_grants_link(false) %>
+          <%= get_bounty_grants_link(false) %>
+    </span>
     <div class="pull-right">
-      <button id="executeButton" class="btn btn-success">Save & Download List</button>
+      <table id="grantsTable" class="options-table">
+        <tr>
+          <th>Month</th>
+          <td>
+            <label>
+              <select id="monthSelector" class="form-control">
+                <% Date::MONTHNAMES.each_with_index do |month, index| %>
+                    <% if month != nil %>
+                        <option value="<%= index %>">
+                          <%= month %>
+                        </option>
+                    <% end %>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <th>Year</th>
+          <td>
+            <label>
+              <select id="yearSelector" class="form-control">
+                <% Date.today.year.downto(2013).each do |year| %>
+                    <option value="<%= year %>"><%= year %></option>
+                <% end %>
+              </select>
+            </label>
+          </td>
+          <td>
+            <button id="executeButton" class="btn btn-success btn-sm">Save & Download List</button>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
   <div class="table-responsive">
@@ -33,8 +68,29 @@
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-  $('#executeButton').click(function() {
+  $('#executeButton').click(function () {
     $(this).prop('disabled', true);
     window.location = '<%= adjustment_grants_path format: :csv %>';
   });
+  $("#monthSelector").val("<%=@grant_date.month%>");
+  $("#yearSelector").val("<%=@grant_date.year%>");
+
+  $("#executeButton").prop('disabled', <%= @granted_month %>); //YeeHaw! That was shitty!
+
+  function getTargetDateParameter() {
+    var year = $("#yearSelector").children(":selected").val();
+    var month = $("#monthSelector").children(":selected").val();
+    return "?target_date=" + year + "-" + month + "-01";
+  }
+
+  $("#monthSelector, #yearSelector").change(function () {
+    window.location = "/periodic_grants" + getTargetDateParameter();
+  });
+
+  console.log('<%= url_for :action => 'periodic_grants', :format => :csv %>');
+  $('#executeButton').click(function () {
+    $(this).prop('disabled', true);
+    window.location = '<%= periodic_grants_path :format => :csv %>' + getTargetDateParameter();
+  });
+
 </script>

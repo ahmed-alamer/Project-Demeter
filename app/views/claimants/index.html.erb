@@ -23,20 +23,16 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
-          <th></th>
-          <th></th>
         </tr>
         </thead>
 
         <tbody>
         <% @claimants.each do |claimant| %>
             <tr>
-              <td><%= claimant.id %></td>
+              <td><%= link_to "#{claimant.id}", claimant %></td>
               <td><%= claimant.first_name %></td>
               <td><%= claimant.last_name %></td>
               <td><%= claimant.email %></td>
-              <td><%= link_to 'Show', claimant %></td>
-              <td><%= link_to 'Edit', edit_claimant_path(claimant) %></td>
             </tr>
         <% end %>
         </tbody>

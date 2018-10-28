@@ -3,6 +3,11 @@
     <h3 class="panel-title">Periodic Grants</h3>
   </div>
   <div class="panel-body">
+    <span class="btn-group pull-left" role="group" aria-label="...">
+      <%= get_adjustment_grants_link(false) %>
+          <%= get_periodic_grants_link(true) %>
+          <%= get_bounty_grants_link(false) %>
+    </span>
     <div class="pull-right">
       <table id="grantsTable" class="options-table">
         <tr>
